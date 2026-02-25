@@ -1,0 +1,244 @@
+{
+  "deliverables": [
+    {
+      "issue_id": 2,
+      "filename": "persistent-agent-architecture-analysis.md",
+      "path": ".issues/deliverables/issue-002/persistent-agent-architecture-analysis.md",
+      "description": "永续 Agent 系统架构 - 完整学习笔记和对比分析（8568 bytes）\n包含：\n1. 学习内容总结（三大支柱）\n2. 深度对比分析（4 个维度）\n3. 5 个优化建议（P0/P1/P2 分级）\n4. 3 阶段实施计划\n5. 关键洞察与学习",
+      "added_at": "2026-02-25T06:15:36.458116",
+      "size": "14.7 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "optimization-checklist.md",
+      "path": ".issues/deliverables/issue-002/optimization-checklist.md",
+      "description": "优化建议执行清单（4720 bytes）\n快速参考文档，包含：\n1. 5 个优化建议详细说明\n2. 每个建议的实施步骤和验收标准\n3. 3 阶段实施计划和时间表\n4. 预期效果量化指标\n便于项目管理和任务分配",
+      "added_at": "2026-02-25T06:16:22.431386",
+      "size": "7.6 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task_tracker.py",
+      "path": ".issues/deliverables/issue-001/task_tracker.py",
+      "description": "任务追踪系统核心模块 - 提供任务创建、更新、查询、超时检查功能",
+      "added_at": "2026-02-25T06:37:44.742538",
+      "size": "8.9 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task_notifier.py",
+      "path": ".issues/deliverables/issue-001/task_notifier.py",
+      "description": "任务通知器 - 自动发送飞书通知（完成/失败/超时）",
+      "added_at": "2026-02-25T06:37:44.784452",
+      "size": "4.7 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task_helper.py",
+      "path": ".issues/deliverables/issue-001/task_helper.py",
+      "description": "任务助手 - 简化的 API，提供 start/complete/fail/check/list 命令",
+      "added_at": "2026-02-25T06:37:44.841284",
+      "size": "5.3 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task-tracker.sh",
+      "path": ".issues/deliverables/issue-001/task-tracker.sh",
+      "description": "Shell 版本的任务追踪工具（备用）",
+      "added_at": "2026-02-25T06:37:44.914200",
+      "size": "4.5 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": ".tasks",
+      "path": ".issues/deliverables/issue-001/.tasks",
+      "description": "任务追踪目录结构（包含 README.md 和 USAGE.md）",
+      "added_at": "2026-02-25T06:37:44.977521",
+      "size": "8.2 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "IMPLEMENTATION_SUMMARY.md",
+      "path": ".issues/deliverables/issue-001/IMPLEMENTATION_SUMMARY.md",
+      "description": "实现总结文档 - 包含交付物清单、功能特性、测试结果、使用示例",
+      "added_at": "2026-02-25T06:38:19.567790",
+      "size": "4.9 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "memory_indexer.py",
+      "path": ".issues/deliverables/issue-002/memory_indexer.py",
+      "description": "记忆索引系统 - 提供关键词/标签/优先级索引和快速搜索功能",
+      "added_at": "2026-02-25T06:51:17.278879",
+      "size": "11.4 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "memory_ttl.py",
+      "path": ".issues/deliverables/issue-002/memory_ttl.py",
+      "description": "TTL 管理器 - 实现记忆优先级和自动过期机制（P0=never, P1=90d, P2=30d, P3=7d）",
+      "added_at": "2026-02-25T06:51:17.378762",
+      "size": "10.5 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "PERSISTENT_AGENT_GUIDE.md",
+      "path": ".issues/deliverables/issue-002/PERSISTENT_AGENT_GUIDE.md",
+      "description": "永续 Agent 实施指南 - 包含快速开始、自动化集成、最佳实践",
+      "added_at": "2026-02-25T06:51:17.440474",
+      "size": "6.5 KB"
+    },
+    {
+      "issue_id": 4,
+      "filename": "SHARED_USAGE_GUIDE.md",
+      "path": ".issues/deliverables/issue-004/SHARED_USAGE_GUIDE.md",
+      "description": "x-tweet-fetcher 共享使用指南（6833 bytes）\n包含：\n1. 快速开始指南\n2. 5 大核心功能说明\n3. 常见使用场景和示例\n4. 测试结果验证\n5. 故障排除和最佳实践\n所有 Agent 现在都可以使用这个工具抓取推文！",
+      "added_at": "2026-02-25T06:54:03.388764",
+      "size": "9.1 KB"
+    },
+    {
+      "issue_id": 4,
+      "filename": "x-tweet-fetcher-migration-report.md",
+      "path": ".issues/deliverables/issue-004/x-tweet-fetcher-migration-report.md",
+      "description": "x-tweet-fetcher 迁移完成报告（4630 bytes）\n包含：\n1. 迁移详情和文件结构\n2. 功能测试结果（2 个测试通过）\n3. 5 大核心功能说明\n4. 使用建议和最佳实践\n5. 后续维护计划\nP0 紧急任务已完成！",
+      "added_at": "2026-02-25T06:54:44.649897",
+      "size": "6.6 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task_tracker.py",
+      "path": ".issues/deliverables/issue-001/task_tracker.py",
+      "description": "核心追踪器 - 任务创建、更新、查询、超时检查（8.9 KB）",
+      "added_at": "2026-02-25T06:55:54.473422",
+      "size": "8.9 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task_notifier.py",
+      "path": ".issues/deliverables/issue-001/task_notifier.py",
+      "description": "通知器 - 飞书集成，完成/失败/超时通知（4.7 KB）",
+      "added_at": "2026-02-25T06:55:58.485708",
+      "size": "4.7 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task_helper.py",
+      "path": ".issues/deliverables/issue-001/task_helper.py",
+      "description": "简化 API - 友好的命令行接口（5.3 KB）",
+      "added_at": "2026-02-25T06:56:03.031548",
+      "size": "5.3 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "task-tracker.sh",
+      "path": ".issues/deliverables/issue-001/task-tracker.sh",
+      "description": "Shell 版本 - Bash 脚本接口（4.5 KB）",
+      "added_at": "2026-02-25T06:56:09.026884",
+      "size": "4.5 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": ".tasks",
+      "path": ".issues/deliverables/issue-001/.tasks",
+      "description": "任务数据目录 - 包含 active/completed/failed 子目录和 USAGE.md 文档（8.2 KB）",
+      "added_at": "2026-02-25T06:56:13.683348",
+      "size": "20.9 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "IMPLEMENTATION_SUMMARY.md",
+      "path": ".issues/deliverables/issue-001/IMPLEMENTATION_SUMMARY.md",
+      "description": "实现总结 - 架构设计、核心功能、使用示例（3 KB）",
+      "added_at": "2026-02-25T06:56:18.369786",
+      "size": "4.9 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "memory_indexer.py",
+      "path": ".issues/deliverables/issue-002/memory_indexer.py",
+      "description": "记忆索引系统 - 关键词/标签/优先级索引，搜索速度提升10x（11 KB）",
+      "added_at": "2026-02-25T06:58:37.608763",
+      "size": "11.4 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "memory_ttl.py",
+      "path": ".issues/deliverables/issue-002/memory_ttl.py",
+      "description": "TTL 管理器 - P0=never, P1=90d, P2=30d, P3=7d，自动过期机制（10 KB）",
+      "added_at": "2026-02-25T06:58:41.708037",
+      "size": "10.5 KB"
+    },
+    {
+      "issue_id": 2,
+      "filename": "PERSISTENT_AGENT_GUIDE.md",
+      "path": ".issues/deliverables/issue-002/PERSISTENT_AGENT_GUIDE.md",
+      "description": "永续 Agent 实施指南 - 快速开始 + 自动化集成（8 KB）",
+      "added_at": "2026-02-25T06:58:54.512546",
+      "size": "6.5 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "long-task-auto-report.md",
+      "path": ".issues/deliverables/issue-001/long-task-auto-report.md",
+      "description": "长任务自动回报机制 - 完整指南（2.6 KB）\n\n包含：\n1. 自动识别长任务的标准\n2. Background session + Cron 的完整流程\n3. 示例代码和使用说明\n4. 关键原则和注意事项\n\n已集成到所有 Agent 的 AGENTS.md 中。",
+      "added_at": "2026-02-25T07:11:53.429844",
+      "size": "2.6 KB"
+    },
+    {
+      "issue_id": 1,
+      "filename": "IMPLEMENTATION_SUMMARY_v2.md",
+      "path": ".issues/deliverables/issue-001/IMPLEMENTATION_SUMMARY_v2.md",
+      "description": "实现总结文档 v2 - 详细说明新实现方案、与原方案对比、使用示例（4.8 KB）",
+      "added_at": "2026-02-25T07:12:33.067323",
+      "size": "4.2 KB"
+    },
+    {
+      "issue_id": 8,
+      "filename": "README.md",
+      "path": ".issues/deliverables/issue-008/README.md",
+      "description": "完整使用文档 - 快速开始、API 接口、配置说明、故障排除",
+      "added_at": "2026-02-25T09:09:24.027385",
+      "size": "5.7 KB"
+    },
+    {
+      "issue_id": 9,
+      "filename": "README.md",
+      "path": ".issues/deliverables/issue-009/README.md",
+      "description": "Web Dashboard 使用文档 - 功能特性和技术栈",
+      "added_at": "2026-02-25T09:25:37.762278",
+      "size": "5.1 KB"
+    },
+    {
+      "issue_id": 7,
+      "filename": "gen2-system-comparison.md",
+      "path": ".issues/deliverables/issue-007/gen2-system-comparison.md",
+      "description": "",
+      "added_at": "2026-02-25T12:25:25.909718",
+      "size": "14.9 KB"
+    },
+    {
+      "issue_id": 7,
+      "filename": "implementation-plan-p0.md",
+      "path": ".issues/deliverables/issue-007/implementation-plan-p0.md",
+      "description": "",
+      "added_at": "2026-02-25T12:25:25.936371",
+      "size": "15.5 KB"
+    },
+    {
+      "issue_id": 7,
+      "filename": "issue-7-final-summary.md",
+      "path": ".issues/deliverables/issue-007/issue-7-final-summary.md",
+      "description": "",
+      "added_at": "2026-02-25T12:25:25.958247",
+      "size": "10.0 KB"
+    },
+    {
+      "issue_id": 11,
+      "filename": "IMPLEMENTATION_SUMMARY.md",
+      "path": ".issues/deliverables/issue-011/IMPLEMENTATION_SUMMARY.md",
+      "description": "子代理监控误报修复总结 - cron prompt 替换为四步验证流程 + AGENTS.md 新增第7条防混乱规则 + 路径错误修正",
+      "added_at": "2026-02-25T14:47:00.000000",
+      "size": "3.2 KB"
+    }
+  ]
+}

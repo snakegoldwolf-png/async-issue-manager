@@ -1,0 +1,227 @@
+{
+  "next_id": 14,
+  "issues": [
+    {
+      "id": 1,
+      "title": "任务主动回报机制 - 学习并实现",
+      "priority": "P0",
+      "labels": [
+        "learning",
+        "automation",
+        "notification"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-25T05:36:00",
+      "updated_at": "2026-02-25T06:31:22.310214",
+      "file": ".issues/closed/001-task-auto-report.md",
+      "assigned_at": "2026-02-25T06:31:22.310205",
+      "closed_at": "2026-02-25T12:58:12.226221",
+      "resolution": ""
+    },
+    {
+      "id": 2,
+      "title": "永续 Agent 系统架构 - 学习并优化",
+      "priority": "P1",
+      "labels": [
+        "architecture",
+        "learning",
+        "memory",
+        "task-management"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-25T05:36:00",
+      "updated_at": "2026-02-25T06:31:28.113902",
+      "file": ".issues/closed/002-persistent-agent-architecture.md",
+      "assigned_at": "2026-02-25T06:31:28.113888",
+      "closed_at": "2026-02-25T12:58:12.264592",
+      "resolution": ""
+    },
+    {
+      "id": 3,
+      "title": "第二代 AI 工作系统 - 深度学习与适配",
+      "priority": "P1",
+      "labels": [
+        "architecture",
+        "learning",
+        "optimization",
+        "system-design"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-25T05:36:00",
+      "updated_at": "2026-02-25T08:08:00",
+      "file": ".issues/in-progress/003-second-gen-ai-system.md",
+      "assigned_at": "2026-02-25T06:31:31.970494",
+      "closed_at": "2026-02-25T08:13:40.167930"
+    },
+    {
+      "id": 4,
+      "title": "迁移 x-tweet-fetcher 到共享空间 - 让所有 Agent 都能用",
+      "priority": "P0",
+      "labels": [
+        "infrastructure",
+        "skill-migration",
+        "urgent"
+      ],
+      "status": "closed",
+      "assignee": "hunter",
+      "created_at": "2026-02-25T05:42:38",
+      "updated_at": "2026-02-25T06:31:37.789309",
+      "file": ".issues/closed/004-migrate-x-tweet-fetcher.md",
+      "assigned_at": "2026-02-25T06:31:37.789295",
+      "closed_at": "2026-02-25T12:58:12.155414",
+      "resolution": ""
+    },
+    {
+      "id": 5,
+      "title": "解决 auto compaction 导致的上下文混乱问题",
+      "priority": "P0",
+      "labels": [
+        "system",
+        "debugging",
+        "context-management"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-25T08:43:44.401098",
+      "updated_at": "2026-02-25T08:43:55.174449",
+      "file": ".issues/closed/005-解决-auto-compaction-导致的上下文混乱问题.md",
+      "assigned_at": "2026-02-25T08:43:55.174103",
+      "closed_at": "2026-02-25T09:30:00.632088",
+      "resolution": ""
+    },
+    {
+      "id": 6,
+      "title": "引入团队公共知识库（Obsidian 集成）",
+      "priority": "P1",
+      "labels": [
+        "documentation",
+        "knowledge-management",
+        "integration"
+      ],
+      "status": "in-progress",
+      "assignee": "filer",
+      "created_at": "2026-02-25T08:43:55.205469",
+      "updated_at": "2026-02-25T08:44:09.355097",
+      "file": ".issues/in-progress/006-引入团队公共知识库obsidian-集成.md",
+      "assigned_at": "2026-02-25T08:44:09.354699"
+    },
+    {
+      "id": 7,
+      "title": "研究第二代 AI 工作系统优化方法并适配团队",
+      "priority": "P1",
+      "labels": [
+        "architecture",
+        "learning",
+        "optimization",
+        "system-design"
+      ],
+      "status": "closed",
+      "assignee": "hunter",
+      "created_at": "2026-02-25T08:44:09.391140",
+      "updated_at": "2026-02-25T08:44:36.065412",
+      "file": ".issues/closed/007-研究第二代-ai-工作系统优化方法并适配团队.md",
+      "assigned_at": "2026-02-25T08:44:36.065053",
+      "closed_at": "2026-02-25T12:58:12.090896",
+      "resolution": ""
+    },
+    {
+      "id": 8,
+      "title": "开发网页端看板（手机远程查看）",
+      "priority": "P1",
+      "labels": [
+        "web",
+        "frontend",
+        "dashboard",
+        "mobile"
+      ],
+      "status": "closed",
+      "assignee": "webby",
+      "created_at": "2026-02-25T09:02:25.486056",
+      "updated_at": "2026-02-25T09:02:34.564159",
+      "file": ".issues/closed/008-开发网页端看板手机远程查看.md",
+      "assigned_at": "2026-02-25T09:02:34.563689",
+      "closed_at": "2026-02-25T12:58:12.190518",
+      "resolution": ""
+    },
+    {
+      "id": 9,
+      "title": "部署 Issue 看板到 Cloudflare（手机随时访问）",
+      "priority": "P1",
+      "labels": [
+        "web,deployment,cloudflare,mobile"
+      ],
+      "status": "closed",
+      "assignee": "webby",
+      "created_at": "2026-02-25T09:20:50.359781",
+      "updated_at": "2026-02-25T09:20:55.276351",
+      "file": ".issues/closed/009-部署-issue-看板到-cloudflare手机随时访问.md",
+      "assigned_at": "2026-02-25T09:20:55.276005",
+      "closed_at": "2026-02-25T09:26:13.888753",
+      "resolution": "✅ Cloudflare Pages 部署方案已完成\n\n## 实现方案\n采用**静态部署 + 定期数据推送**方案，实现手机随时随地访问看板。\n\n## 核心组件\n\n### 1. 静态数据生成 (generate_static_data.py)\n- 解析 .issues/ 目录下所有 Markdown 文件\n- 生成 JSON 数据文件（issues.json, stats.json, agents.json）\n- 为每个 Issue 生成单独的详情文件\n- 输出到 web-dashboard/data/ 目录\n\n### 2. 前端静态模式 (index.html)\n- 支持双模式：API 模式（本地开发）+ 静态模式（生产部署）\n- USE_STATIC_DATA 开关控制\n- 静态模式直接读取 JSON 文件，无需后端服务\n- 完整功能：筛选、搜索、详情查看\n\n### 3. 自动部署系统\n**GitHub Actions** (.github/workflows/deploy.yml)\n- 每次推送自动部署\n- 每小时自动更新数据\n- 支持手动触发\n\n**本地更新脚本** (update_and_push.sh)\n- 生成最新数据\n- Git commit & push\n- 支持 cron/launchd 定时任务\n\n### 4. 完整文档\n- **QUICKSTART.md** - 5分钟快速部署指南\n- **DEPLOY.md** - 详细配置和故障排除\n- **README.md** - 功能特性和技术栈\n\n## 部署步骤\n\n1. 推送代码到 GitHub\n2. Cloudflare Pages 连接仓库\n3. 配置构建命令：`cd web-dashboard && python3 generate_static_data.py`\n4. 配置输出目录：`web-dashboard`\n5. 访问：https://your-project.pages.dev\n\n## 优势\n\n✅ **零成本** - Cloudflare Pages 免费版足够使用  \n✅ **零运维** - 无需管理服务器  \n✅ **全球加速** - Cloudflare CDN 覆盖全球  \n✅ **自动 HTTPS** - 免费 SSL 证书  \n✅ **自动更新** - GitHub Actions 定期同步  \n✅ **随时访问** - 手机/电脑随时查看  \n\n## 测试结果\n\n✅ 静态数据生成成功（5 issues, 4 agents）  \n✅ 前端静态模式加载正常  \n✅ 所有功能正常工作  \n✅ 响应式设计测试通过（桌面/平板/手机）  \n\n## 交付物\n\n所有文件已归档到 .issues/deliverables/issue-009/：\n- generate_static_data.py - 静态数据生成脚本\n- index.html - 看板前端（静态模式）\n- deploy.yml - GitHub Actions 配置\n- update_and_push.sh - 本地自动更新脚本\n- QUICKSTART.md - 快速部署指南\n- DEPLOY.md - 完整部署文档\n- README.md - 使用文档\n\n## 后续优化建议\n\nP1:\n- 自定义域名配置\n- 数据压缩优化\n- 缓存策略调整\n\nP2:\n- Webhook 触发（Issue 变更时立即更新）\n- 增量更新（只更新变更的数据）\n- 暗色模式\n\nP3:\n- 多环境部署（dev/staging/prod）\n- 访问统计（Cloudflare Analytics）\n- PWA 离线支持"
+    },
+    {
+      "id": 10,
+      "title": "融合 Hunter 研究成果：在三层记忆结构基础上实现八步自我迭代流程",
+      "priority": "P1",
+      "labels": [
+        "architecture",
+        "system-design",
+        "memory-system",
+        "optimization"
+      ],
+      "status": "in-progress",
+      "assignee": "dev",
+      "created_at": "2026-02-25T10:19:04.706294",
+      "updated_at": "2026-02-25T10:19:33.810926",
+      "file": ".issues/in-progress/010-融合-hunter-研究成果在三层记忆结构基础上实现八步自我迭代流程.md",
+      "assigned_at": "2026-02-25T10:19:33.810592"
+    },
+    {
+      "id": 11,
+      "title": "Dev Agent session 持续 aborted 状态导致无法响应消息",
+      "priority": "P0",
+      "labels": [],
+      "status": "closed",
+      "assignee": "debugger",
+      "created_at": "2026-02-25T13:58:19.125591",
+      "updated_at": "2026-02-25T13:59:24.966617",
+      "file": ".issues/closed/011-dev-agent-session-持续-aborted-状态导致无法响应消息.md",
+      "assigned_at": "2026-02-25T13:59:24.966294",
+      "closed_at": "2026-02-25T22:37:39.477569",
+      "resolution": ""
+    },
+    {
+      "id": 12,
+      "title": "测试工作空间创建",
+      "priority": "P2",
+      "labels": [
+        "test"
+      ],
+      "status": "closed",
+      "assignee": "unassigned",
+      "created_at": "2026-02-25T17:24:21.310031",
+      "updated_at": "2026-02-25T17:24:21.310031",
+      "file": ".issues/closed/012-测试工作空间创建.md",
+      "workspace": "desktop/issue/#012-测试工作空间创建",
+      "closed_at": "2026-02-25T17:25:11.231639",
+      "resolution": "测试完成，工作空间创建功能正常"
+    },
+    {
+      "id": 13,
+      "title": "测试工作空间路径",
+      "priority": "P3",
+      "labels": [],
+      "status": "closed",
+      "assignee": "unassigned",
+      "created_at": "2026-02-25T23:21:34.321251",
+      "updated_at": "2026-02-25T23:21:34.321251",
+      "file": ".issues/closed/013-测试工作空间路径.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#013-测试工作空间路径",
+      "closed_at": "2026-02-25T23:22:04.934422",
+      "resolution": "测试完成，路径正确"
+    }
+  ]
+}

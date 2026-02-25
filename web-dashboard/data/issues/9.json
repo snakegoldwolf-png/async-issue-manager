@@ -1,0 +1,17 @@
+{
+  "id": 9,
+  "title": "部署 Issue 看板到 Cloudflare（手机随时访问）",
+  "status": "in-progress",
+  "priority": "P1",
+  "labels": "web,deployment,cloudflare,mobile",
+  "assignee": "webby",
+  "created_at": "2026-02-25T09:20:50.359781",
+  "updated_at": "2026-02-25T09:20:50.359781",
+  "assigned_at": "2026-02-25T09:20:55.276005",
+  "closed_at": null,
+  "file": ".issues/in-progress/009-部署-issue-看板到-cloudflare手机随时访问.md",
+  "body": "",
+  "progress_history": [],
+  "deliverables": [],
+  "resolution": null
+}

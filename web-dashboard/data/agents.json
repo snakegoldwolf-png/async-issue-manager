@@ -1,0 +1,33 @@
+{
+  "total": 4,
+  "agents": [
+    {
+      "name": "webby",
+      "total": 2,
+      "open": 0,
+      "in_progress": 1,
+      "closed": 1
+    },
+    {
+      "name": "dev",
+      "total": 1,
+      "open": 0,
+      "in_progress": 1,
+      "closed": 0
+    },
+    {
+      "name": "filer",
+      "total": 1,
+      "open": 0,
+      "in_progress": 1,
+      "closed": 0
+    },
+    {
+      "name": "hunter",
+      "total": 1,
+      "open": 0,
+      "in_progress": 1,
+      "closed": 0
+    }
+  ]
+}

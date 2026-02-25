@@ -1,0 +1,544 @@
+#!/usr/bin/env python3
+"""
+本地 Issue 管理器
+在 .issues/ 目录下管理 Issues，使用 Git 追踪
+
+用法:
+  python3 manager.py create --title "任务标题" --body "描述" --priority P1 --labels bug fix
+  python3 manager.py list [--status open|in-progress|closed] [--labels tag1 tag2]
+  python3 manager.py show <id>
+  python3 manager.py assign <id> <agent_name>
+  python3 manager.py close <id> [--resolution "解决说明"]
+"""
+
+import sys
+import json
+from pathlib import Path
+from datetime import datetime
+
+# 导入权限控制模块
+from auth import require_create_permission
+
+# 自动检测工作区根目录：优先使用共享目录
+import os
+def find_workspace():
+    """查找工作区根目录"""
+    # 1. 优先使用共享目录
+    shared_ws = Path.home() / ".openclaw" / "shared" / "async-issue-manager"
+    if shared_ws.exists():
+        return shared_ws
+    
+    # 2. 环境变量
+    env_ws = os.environ.get("WORKSPACE") or os.environ.get("OPENCLAW_WORKSPACE")
+    if env_ws and Path(env_ws).exists():
+        return Path(env_ws)
+    
+    # 3. 向上查找 .issues/ 目录
+    current = Path(__file__).resolve().parent
+    for _ in range(10):
+        if (current / ".issues").exists():
+            return current
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
+    
+    # 4. 默认当前工作目录
+    return Path.cwd()
+
+WORKSPACE = find_workspace()
+ISSUES_DIR = WORKSPACE / ".issues"
+
+
+class IssueManager:
+    def __init__(self, workspace=None):
+        if workspace:
+            self.workspace = Path(workspace)
+        else:
+            self.workspace = WORKSPACE
+        
+        self.issues_dir = self.workspace / ".issues"
+        self.open_dir = self.issues_dir / "open"
+        self.in_progress_dir = self.issues_dir / "in-progress"
+        self.closed_dir = self.issues_dir / "closed"
+        
+        # 确保目录存在
+        for d in [self.open_dir, self.in_progress_dir, self.closed_dir]:
+            d.mkdir(parents=True, exist_ok=True)
+        
+        # 索引文件
+        self.index_file = self.issues_dir / "index.json"
+        self.load_index()
+    
+    def load_index(self):
+        """加载索引"""
+        if self.index_file.exists():
+            try:
+                with open(self.index_file, 'r') as f:
+                    self.index = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                self.index = {"issues": [], "next_id": 1}
+        else:
+            self.index = {"issues": [], "next_id": 1}
+    
+    def save_index(self):
+        """保存索引"""
+        with open(self.index_file, 'w') as f:
+            json.dump(self.index, f, indent=2, ensure_ascii=False)
+    
+    @require_create_permission()
+    def create(self, title, body="", priority="P2", labels=None, assignee=None, assigned_at=None):
+        """创建 Issue（需要权限）"""
+        if not title or not title.strip():
+            print("❌ 标题不能为空")
+            return None
+        title = title.strip()
+        
+        if labels is None:
+            labels = []
+        
+        issue_id = self.index["next_id"]
+        self.index["next_id"] += 1
+        timestamp = datetime.now().isoformat()
+        
+        issue = {
+            "id": issue_id,
+            "title": title,
+            "priority": priority,
+            "labels": labels if isinstance(labels, list) else [labels],
+            "status": "open",
+            "assignee": assignee or "unassigned",
+            "created_at": timestamp,
+            "updated_at": timestamp
+        }
+        
+        # 如果创建时就指定了 assignee，记录分配时间
+        if assignee and assignee != "unassigned":
+            issue["assigned_at"] = assigned_at or timestamp
+        
+        # 文件名：ID-标题slug（保留中文字符）
+        slug = title.lower().replace(" ", "-")
+        # 保留字母、数字、中文、日文、韩文、连字符、下划线
+        import re
+        slug = re.sub(r'[^\w\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af-]', '', slug)[:50]
+        filename = f"{issue_id:03d}-{slug}.md"
+        filepath = self.open_dir / filename
+        
+        # 写入 Issue 文件
+        content = f"""---
+id: {issue_id}
+title: {title}
+priority: {priority}
+labels: {', '.join(issue['labels'])}
+status: open
+assignee: {issue['assignee']}
+created_at: {timestamp}
+updated_at: {timestamp}
+---
+
+{body}
+"""
+        filepath.write_text(content, encoding='utf-8')
+        
+        # 创建工作空间目录
+        workspace_name = f"#{issue_id:03d}-{slug}"
+        workspace_dir = Path("/Users/loryoncloud/Desktop/Issues") / workspace_name
+        workspace_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 创建工作空间 README
+        readme_content = f"""# Issue #{issue_id:03d} 工作空间 - {title}
+
+**Issue**: #{issue_id:03d} - {slug}  
+**负责人**: {assignee or 'unassigned'}  
+**创建时间**: {timestamp}  
+**状态**: {issue['status']}
+
+---
+
+## 📋 工作空间说明
+
+这是 Issue #{issue_id:03d} 的独立工作空间，用于存放所有工作过程、草稿、临时文件。
+
+**工作空间用途**：
+- 调研笔记
+- 设计草稿
+- 代码实验
+- 临时文件
+- 会议记录
+
+**最终交付物位置**：`.issues/deliverables/issue-{issue_id:03d}/`
+
+---
+
+## 📁 目录结构
+
+```
+{workspace_name}/
+├── README.md          # 本文件
+├── research/          # 调研资料
+├── design/            # 设计文档
+├── drafts/            # 草稿
+└── notes/             # 工作笔记
+```
+
+---
+
+## 📊 工作进度
+
+### ✅ 已完成
+- [ ] 任务项 1
+
+### 🔲 进行中
+- [ ] 任务项 2
+
+### 📦 交付物
+- 待添加
+
+---
+
+**最后更新**: {timestamp}
+"""
+        readme_path = workspace_dir / "README.md"
+        readme_path.write_text(readme_content, encoding='utf-8')
+        
+        # 创建子目录
+        for subdir in ["research", "design", "drafts", "notes"]:
+            (workspace_dir / subdir).mkdir(exist_ok=True)
+        
+        # 更新索引
+        issue["file"] = str(filepath.relative_to(self.workspace))
+        issue["workspace"] = str(workspace_dir)  # 使用绝对路径
+        self.index["issues"].append(issue)
+        self.save_index()
+        
+        print(f"✅ Issue #{issue_id} 创建: {title}")
+        print(f"📁 工作空间: {workspace_dir}")
+        return issue
+    
+    def list_issues(self, status="open", labels=None, priority=None, assignee=None):
+        """列出 Issues（支持过滤）"""
+        results = []
+        for issue in self.index["issues"]:
+            if status and issue.get("status") != status:
+                continue
+            if labels and not any(l in issue.get("labels", []) for l in labels):
+                continue
+            if priority and issue.get("priority") != priority:
+                continue
+            if assignee and issue.get("assignee") != assignee:
+                continue
+            results.append(issue)
+        return results
+    
+    def get(self, issue_id):
+        """获取单个 Issue 详情"""
+        issue = self._find(issue_id)
+        if not issue:
+            return None
+        filepath = self.workspace / issue["file"]
+        if filepath.exists():
+            issue["content"] = filepath.read_text(encoding='utf-8')
+        return issue
+    
+    def assign(self, issue_id, assignee):
+        """分配 Issue 给某个 Agent"""
+        issue = self._find(issue_id)
+        if not issue:
+            print(f"❌ Issue #{issue_id} 不存在")
+            return None
+        
+        old_path = self.workspace / issue["file"]
+        new_path = self.in_progress_dir / old_path.name
+        
+        assigned_at = datetime.now().isoformat()
+        
+        # 更新文件内容
+        if old_path.exists():
+            content = old_path.read_text(encoding='utf-8')
+            content = content.replace(f"assignee: {issue.get('assignee', 'unassigned')}", f"assignee: {assignee}")
+            content = content.replace("status: open", "status: in-progress")
+            
+            # 在 updated_at 后面插入 assigned_at
+            import re
+            content = re.sub(
+                r'(updated_at: [^\n]+)',
+                f'\\1\nassigned_at: {assigned_at}',
+                content
+            )
+            
+            new_path.write_text(content, encoding='utf-8')
+            old_path.unlink()
+        
+        # 更新索引
+        issue["assignee"] = assignee
+        issue["status"] = "in-progress"
+        issue["assigned_at"] = assigned_at
+        issue["updated_at"] = datetime.now().isoformat()
+        issue["file"] = str(new_path.relative_to(self.workspace))
+        self.save_index()
+        
+        print(f"✅ Issue #{issue_id} → {assignee} (分配时间: {assigned_at})")
+        return issue
+    
+    def unassign(self, issue_id):
+        """取消分配 Issue，将状态改回 open"""
+        issue = self._find(issue_id)
+        if not issue:
+            print(f"❌ Issue #{issue_id} 不存在")
+            return None
+        
+        old_path = self.workspace / issue["file"]
+        new_path = self.open_dir / old_path.name
+        
+        # 更新文件内容
+        if old_path.exists():
+            content = old_path.read_text(encoding='utf-8')
+            # 替换 assignee
+            import re
+            content = re.sub(r'assignee: .+', 'assignee: unassigned', content)
+            # 替换 status
+            content = re.sub(r'status: in-progress', 'status: open', content)
+            # 移除 assigned_at 行
+            content = re.sub(r'\nassigned_at: [^\n]+', '', content)
+            
+            new_path.write_text(content, encoding='utf-8')
+            old_path.unlink()
+        
+        # 更新索引
+        issue["assignee"] = "unassigned"
+        issue["status"] = "open"
+        if "assigned_at" in issue:
+            del issue["assigned_at"]
+        issue["updated_at"] = datetime.now().isoformat()
+        issue["file"] = str(new_path.relative_to(self.workspace))
+        self.save_index()
+        
+        print(f"✅ Issue #{issue_id} 已取消分配，状态改回 open")
+        return issue
+    
+    def close(self, issue_id, resolution="", check_deliverable=True):
+        """关闭 Issue（需要检查交付物）"""
+        issue = self._find(issue_id)
+        if not issue:
+            print(f"❌ Issue #{issue_id} 不存在")
+            return None
+        
+        # 检查是否有交付物
+        if check_deliverable:
+            try:
+                from deliverable import DeliverableManager
+                dm = DeliverableManager()
+                deliverables = [d for d in dm.index["deliverables"] if d["issue_id"] == issue_id]
+                if not deliverables:
+                    print(f"❌ Issue #{issue_id} 没有交付物，无法关闭")
+                    print(f"   请先使用 deliverable.py add {issue_id} --file <path> 添加交付物")
+                    print(f"   或使用 --no-check-deliverable 跳过检查（不推荐）")
+                    return None
+            except Exception as e:
+                print(f"⚠️ 无法检查交付物: {e}")
+        
+        old_path = self.workspace / issue["file"]
+        new_path = self.closed_dir / old_path.name
+        
+        closed_at = datetime.now().isoformat()
+        
+        if old_path.exists():
+            content = old_path.read_text(encoding='utf-8')
+            # 更新状态
+            for old_status in ["status: open", "status: in-progress"]:
+                content = content.replace(old_status, "status: closed")
+            # 追加解决方案
+            if resolution:
+                content += f"\n\n## 解决方案\n\n{resolution}\n\n关闭时间: {closed_at}\n"
+            new_path.write_text(content, encoding='utf-8')
+            old_path.unlink()
+        
+        # 更新索引
+        issue["status"] = "closed"
+        issue["closed_at"] = closed_at
+        issue["resolution"] = resolution
+        issue["file"] = str(new_path.relative_to(self.workspace))
+        self.save_index()
+        
+        print(f"✅ Issue #{issue_id} 已关闭")
+        return issue
+    
+    def sync(self):
+        """同步 index.json 与实际文件目录状态"""
+        import re
+        
+        status_dirs = {
+            "open": self.open_dir,
+            "in-progress": self.in_progress_dir,
+            "closed": self.closed_dir,
+        }
+        
+        file_status = {}
+        for status, dir_path in status_dirs.items():
+            for f in dir_path.glob("*.md"):
+                m = re.match(r'^(\d+)-', f.name)
+                if m:
+                    iid = int(m.group(1))
+                    file_status[iid] = (status, str(f.relative_to(self.workspace)))
+        
+        fixed = 0
+        orphans = 0
+        
+        for issue in self.index["issues"]:
+            iid = issue["id"]
+            if iid in file_status:
+                actual_status, actual_file = file_status[iid]
+                if issue["status"] != actual_status or issue.get("file") != actual_file:
+                    old_status = issue["status"]
+                    issue["status"] = actual_status
+                    issue["file"] = actual_file
+                    if actual_status == "closed" and "closed_at" not in issue:
+                        issue["closed_at"] = datetime.now().isoformat()
+                    print(f"  🔧 #{iid:03d} {old_status} → {actual_status}")
+                    fixed += 1
+                del file_status[iid]
+            else:
+                if issue["status"] != "closed":
+                    print(f"  ⚠️ #{iid:03d} 文件不存在，标记 closed")
+                    issue["status"] = "closed"
+                    issue["closed_at"] = datetime.now().isoformat()
+                    fixed += 1
+        
+        for iid, (status, filepath) in file_status.items():
+            full_path = self.workspace / filepath
+            title = f"(孤儿 Issue #{iid})"
+            try:
+                content = full_path.read_text(encoding='utf-8')
+                m = re.search(r'^title:\s*(.+)$', content, re.MULTILINE)
+                if m:
+                    title = m.group(1).strip()
+            except:
+                pass
+            
+            self.index["issues"].append({
+                "id": iid, "title": title, "status": status,
+                "file": filepath, "priority": "P2", "labels": [],
+                "created_at": datetime.now().isoformat(),
+                "updated_at": datetime.now().isoformat(),
+            })
+            print(f"  ➕ #{iid:03d} 孤儿文件纳入 index ({status})")
+            orphans += 1
+            if iid >= self.index["next_id"]:
+                self.index["next_id"] = iid + 1
+        
+        self.save_index()
+        
+        total = len(self.index["issues"])
+        by_status = {}
+        for issue in self.index["issues"]:
+            s = issue["status"]
+            by_status[s] = by_status.get(s, 0) + 1
+        
+        print(f"\n📊 同步完成: 修正 {fixed} 个, 新增孤儿 {orphans} 个")
+        print(f"   总计 {total} 个: ", end="")
+        print(" | ".join(f"{s}: {c}" for s, c in sorted(by_status.items())))
+        return {"fixed": fixed, "orphans": orphans, "total": total, "by_status": by_status}
+    
+    def stats(self):
+        """统计概览"""
+        total = len(self.index["issues"])
+        by_status = {}
+        for issue in self.index["issues"]:
+            s = issue.get("status", "unknown")
+            by_status[s] = by_status.get(s, 0) + 1
+        return {"total": total, "by_status": by_status, "next_id": self.index["next_id"]}
+    
+    def _find(self, issue_id):
+        """按 ID 查找"""
+        for issue in self.index["issues"]:
+            if issue["id"] == int(issue_id):
+                return issue
+        return None
+
+
+def main():
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="本地 Issue 管理器")
+    sub = parser.add_subparsers(dest="cmd")
+    
+    # create
+    p = sub.add_parser("create")
+    p.add_argument("--title", required=True)
+    p.add_argument("--body", default="")
+    p.add_argument("--priority", default="P2")
+    p.add_argument("--labels", nargs="+", default=[])
+    
+    # list
+    p = sub.add_parser("list")
+    p.add_argument("--status", default="open")
+    p.add_argument("--labels", nargs="+")
+    p.add_argument("--priority")
+    p.add_argument("--assignee")
+    
+    # show
+    p = sub.add_parser("show")
+    p.add_argument("issue_id", type=int)
+    
+    # assign
+    p = sub.add_parser("assign")
+    p.add_argument("issue_id", type=int)
+    p.add_argument("assignee")
+    
+    # unassign
+    p = sub.add_parser("unassign")
+    p.add_argument("issue_id", type=int)
+    
+    # close
+    p = sub.add_parser("close")
+    p.add_argument("issue_id", type=int)
+    p.add_argument("--resolution", default="")
+    p.add_argument("--no-check-deliverable", action="store_true", help="跳过交付物检查（不推荐）")
+    
+    # stats
+    sub.add_parser("stats")
+    
+    # sync
+    sub.add_parser("sync")
+    
+    args = parser.parse_args()
+    mgr = IssueManager()
+    
+    if args.cmd == "create":
+        mgr.create(args.title, args.body, args.priority, args.labels)
+    elif args.cmd == "list":
+        issues = mgr.list_issues(args.status, args.labels, args.priority, getattr(args, 'assignee', None))
+        print(f"\n{'='*50}")
+        print(f"📋 {args.status} Issues ({len(issues)})")
+        print(f"{'='*50}")
+        for i in issues:
+            labels_str = ", ".join(i.get("labels", []))
+            print(f"  #{i['id']:03d} [{i['priority']}] {i['title']}")
+            print(f"        {i['status']} | {i.get('assignee','?')} | {labels_str}")
+    elif args.cmd == "show":
+        issue = mgr.get(args.issue_id)
+        if issue:
+            print(issue.get("content", ""))
+        else:
+            print(f"❌ Issue #{args.issue_id} 不存在")
+    elif args.cmd == "assign":
+        mgr.assign(args.issue_id, args.assignee)
+    elif args.cmd == "unassign":
+        mgr.unassign(args.issue_id)
+    elif args.cmd == "close":
+        check_deliverable = not getattr(args, 'no_check_deliverable', False)
+        mgr.close(args.issue_id, args.resolution, check_deliverable=check_deliverable)
+    elif args.cmd == "sync":
+        mgr.sync()
+    elif args.cmd == "stats":
+        s = mgr.stats()
+        print(f"\n📊 Issue 统计")
+        print(f"  总计: {s['total']} | 下一个 ID: #{s['next_id']}")
+        for status, count in s["by_status"].items():
+            print(f"  {status}: {count}")
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()

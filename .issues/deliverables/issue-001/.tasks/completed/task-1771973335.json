@@ -1,0 +1,12 @@
+{
+  "id": "task-1771973335",
+  "title": "\u6c38\u7eed Agent \u7cfb\u7edf\u67b6\u6784\u4f18\u5316",
+  "assignee": "dev",
+  "startTime": 1771973335,
+  "estimatedDuration": 14400,
+  "status": "completed",
+  "issueId": "002",
+  "endTime": 1771973461,
+  "result": "\u6c38\u7eed Agent \u7cfb\u7edf\u67b6\u6784\u4f18\u5316\u5b8c\u6210\uff08P0 \u90e8\u5206\uff09\uff1a\n\n\u2705 \u8bb0\u5fc6\u7d22\u5f15\u7cfb\u7edf\uff08memory_indexer.py\uff09\n- \u5173\u952e\u8bcd/\u6807\u7b7e/\u4f18\u5148\u7ea7\u7d22\u5f15\n- \u5feb\u901f\u641c\u7d22\u529f\u80fd\n- \u7edf\u8ba1\u4fe1\u606f\n\n\u2705 TTL \u7ba1\u7406\u5668\uff08memory_ttl.py\uff09\n- \u4f18\u5148\u7ea7\u6807\u8bb0\uff08P0/P1/P2/P3\uff09\n- TTL \u7b56\u7565\uff08never/90d/30d/7d\uff09\n- \u81ea\u52a8\u5f52\u6863\u548c\u8fc7\u671f\u68c0\u67e5\n\n\u2705 \u5b8c\u6574\u6587\u6863\uff08PERSISTENT_AGENT_GUIDE.md\uff09\n- \u5feb\u901f\u5f00\u59cb\u6307\u5357\n- \u81ea\u52a8\u5316\u96c6\u6210\n- \u6700\u4f73\u5b9e\u8df5\n\n\u4ea4\u4ed8\u7269\uff1a\n- scripts/memory_indexer.py\uff0811KB\uff09\n- scripts/memory_ttl.py\uff0810KB\uff09\n- .tasks/PERSISTENT_AGENT_GUIDE.md\uff088KB\uff09\n\nP1/P2 \u4f18\u5316\uff08Heartbeat\u3001\u9ad8\u98ce\u9669\u63a7\u5236\u3001\u6bcf\u65e5\u7b80\u62a5\uff09\u7559\u5f85\u540e\u7eed\u5b9e\u65bd\u3002",
+  "error": ""
+}

@@ -1,0 +1,17 @@
+{
+  "id": 5,
+  "title": "解决 auto compaction 导致的上下文混乱问题",
+  "status": "in-progress",
+  "priority": "P0",
+  "labels": "system, debugging, context-management",
+  "assignee": "dev",
+  "created_at": "2026-02-25T08:43:44.401098",
+  "updated_at": "2026-02-25T08:43:44.401098",
+  "assigned_at": "2026-02-25T08:43:55.174103",
+  "closed_at": null,
+  "file": ".issues/in-progress/005-解决-auto-compaction-导致的上下文混乱问题.md",
+  "body": "",
+  "progress_history": [],
+  "deliverables": [],
+  "resolution": null
+}

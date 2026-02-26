@@ -150,9 +150,9 @@
     </div>
 
     <script>
-        // 配置：静态数据模式
-        const USE_STATIC_DATA = true;
-        const API_BASE = USE_STATIC_DATA ? './data' : 'http://localhost:5001/api';
+        // 配置：实时 API 模式
+        const USE_STATIC_DATA = false;
+        const API_BASE = USE_STATIC_DATA ? './data' : 'https://issues.loryonclaw.me/api';
         
         let allIssues = [];
         let allStats = {};

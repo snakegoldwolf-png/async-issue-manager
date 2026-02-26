@@ -140,6 +140,25 @@ def issues_dashboard():
     return HTMLResponse(content="<h1>Dashboard not found</h1>", status_code=404)
 
 
+@app.get("/issues/dashboard", response_class=HTMLResponse)
+@app.get("/issues/dashboard/", response_class=HTMLResponse)
+def dashboard_page():
+    """独立 Dashboard 页面"""
+    dashboard_file = WEB_DIR / "dashboard" / "index.html"
+    if dashboard_file.exists():
+        return HTMLResponse(content=dashboard_file.read_text(encoding="utf-8"))
+    return HTMLResponse(content="<h1>Dashboard not found</h1>", status_code=404)
+
+
+@app.get("/issues/dashboard/data.json")
+def dashboard_data():
+    """Dashboard 数据"""
+    data_file = WEB_DIR / "dashboard" / "data.json"
+    if data_file.exists():
+        return JSONResponse(content=json.loads(data_file.read_text(encoding="utf-8")))
+    return JSONResponse(content={"error": "Data not found"}, status_code=404)
+
+
 # ========================================
 # API 路由 (/issues/api/*)
 # ========================================

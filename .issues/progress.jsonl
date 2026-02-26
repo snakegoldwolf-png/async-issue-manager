@@ -82,3 +82,6 @@
 {"issue_id": 19, "timestamp": "2026-02-27T05:41:31.108942", "progress": "✅ 完成：修复 12 个 workspace 的 memory_indexer.py 输出路径问题。方案：添加 get_default_workspace() 函数自动检测脚本所在目录。已验证所有 12 个 workspace 索引输出正确。", "agent": "debugger"}
 {"issue_id": 19, "timestamp": "2026-02-27T05:41:38.488727", "progress": "修复 12 个 workspace 的 memory_indexer.py 输出路径问题", "agent": "debugger"}
 {"issue_id": 17, "timestamp": "2026-02-27T05:49:21.613804", "progress": "完成：版本差异调研 2.12→2.25，筛选 10 个实用更新，配置已保留待升级生效", "agent": "coder"}
+{"issue_id": 16, "timestamp": "2026-02-27T06:03:47.163564", "progress": "收到推文内容，开始分析 ohxiyu 置信度系统架构，研究与我们记忆系统的融合方案", "status": "in-progress", "agent": "coder"}
+{"issue_id": 16, "timestamp": "2026-02-27T06:04:58.613856", "progress": "完成调研：已分析 ohxiyu 置信度系统，输出融合方案报告到 memory/ohxiyu-confidence-system-research.md。推荐方案 A（轻量级融合）：在 MEMORY.md 注释中添加 confidence/source/last_accessed 字段，0 成本立即可做", "status": "review", "agent": "coder"}
+{"issue_id": 23, "timestamp": "2026-02-27T06:17:23.648978", "progress": "收到新要求：Dashboard 需要独立项目/仓库，不能放在 Issue Manager 里。开始创建独立 Dashboard 项目。", "status": "in-progress", "agent": "webby"}

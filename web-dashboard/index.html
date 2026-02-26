@@ -487,40 +487,54 @@
             const labels = Array.isArray(issue.labels) ? issue.labels : 
                           (typeof issue.labels === 'string' ? issue.labels.split(',').map(l => l.trim()) : []);
             
+            // 简单的 Markdown 渲染
+            function renderMarkdown(text) {
+                if (!text) return '';
+                return text
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/^## (.+)$/gm, '<h3 class="text-lg font-bold text-[var(--accent)] mt-4 mb-2">$1</h3>')
+                    .replace(/^### (.+)$/gm, '<h4 class="text-md font-bold text-[var(--text-strong)] mt-3 mb-1">$1</h4>')
+                    .replace(/^- (.+)$/gm, '<div class="flex items-start gap-2 ml-2"><span class="text-[var(--accent)]">•</span><span>$1</span></div>')
+                    .replace(/^(\d+)\. (.+)$/gm, '<div class="flex items-start gap-2 ml-2"><span class="text-[var(--accent)] font-bold">$1.</span><span>$2</span></div>')
+                    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-[var(--text-strong)]">$1</strong>')
+                    .replace(/`(.+?)`/g, '<code class="bg-[var(--bg)] px-1 rounded text-[var(--accent)]">$1</code>')
+                    .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-[var(--accent)] underline">$1</a>')
+                    .replace(/\n\n/g, '<div class="h-3"></div>')
+                    .replace(/\n/g, '<br>');
+            }
+            
             const content = `
                 <div class="space-y-6">
-                    <!-- 基本信息 -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="stat-card rounded p-3">
-                            <span class="text-sm text-[var(--muted)]">状态</span>
-                            <div class="mt-1">
-                                <span class="status-${issue.status} text-sm px-3 py-1 rounded inline-block">
-                                    ${formatStatus(issue.status)}
-                                </span>
-                            </div>
+                    <!-- 基本信息卡片 -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="stat-card rounded p-3 text-center">
+                            <div class="text-xs text-[var(--muted)] mb-1">📊 状态</div>
+                            <span class="status-${issue.status} text-sm px-3 py-1 rounded inline-block">
+                                ${formatStatus(issue.status)}
+                            </span>
                         </div>
-                        <div class="stat-card rounded p-3">
-                            <span class="text-sm text-[var(--muted)]">优先级</span>
-                            <div class="mt-1">
-                                <span class="priority-${issue.priority} text-sm px-3 py-1 rounded inline-block font-bold">
-                                    ${issue.priority}
-                                </span>
-                            </div>
+                        <div class="stat-card rounded p-3 text-center">
+                            <div class="text-xs text-[var(--muted)] mb-1">🔥 优先级</div>
+                            <span class="priority-${issue.priority} text-sm px-3 py-1 rounded inline-block font-bold">
+                                ${issue.priority}
+                            </span>
                         </div>
-                        <div class="stat-card rounded p-3">
-                            <span class="text-sm text-[var(--muted)]">负责人</span>
-                            <div class="mt-1 text-[var(--text)]">👤 ${issue.assignee || '未分配'}</div>
+                        <div class="stat-card rounded p-3 text-center">
+                            <div class="text-xs text-[var(--muted)] mb-1">👤 负责人</div>
+                            <div class="text-[var(--text)] font-bold">${issue.assignee || '未分配'}</div>
                         </div>
-                        <div class="stat-card rounded p-3">
-                            <span class="text-sm text-[var(--muted)]">创建时间</span>
-                            <div class="mt-1 text-[var(--text)]">📅 ${formatDate(issue.created_at)}</div>
+                        <div class="stat-card rounded p-3 text-center">
+                            <div class="text-xs text-[var(--muted)] mb-1">📅 创建时间</div>
+                            <div class="text-[var(--text)]">${formatDate(issue.created_at)}</div>
                         </div>
                     </div>
                     
                     <!-- 标签 -->
                     ${labels.length > 0 ? `
-                        <div>
-                            <span class="text-sm text-[var(--muted)] block mb-2">🏷️ 标签</span>
+                        <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
+                            <div class="text-sm text-[var(--muted)] mb-2">🏷️ 标签</div>
                             <div class="flex flex-wrap gap-2">
                                 ${labels.map(label => `
                                     <span class="tag-pixel px-3 py-1 rounded">${label}</span>
@@ -529,19 +543,55 @@
                         </div>
                     ` : ''}
                     
-                    <!-- 描述 -->
+                    <!-- 任务描述 -->
                     ${issue.body ? `
-                        <div>
-                            <span class="text-sm text-[var(--muted)] block mb-2">📝 详情</span>
-                            <div class="description-box rounded p-4 text-[var(--text)]">${issue.body}</div>
+                        <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
+                            <div class="text-sm text-[var(--muted)] mb-3">📝 任务详情</div>
+                            <div class="text-[var(--text)] leading-relaxed">
+                                ${renderMarkdown(issue.body)}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- 进度记录 -->
+                    ${issue.progress_history && issue.progress_history.length > 0 ? `
+                        <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
+                            <div class="text-sm text-[var(--muted)] mb-3">📈 进度记录</div>
+                            <div class="space-y-3">
+                                ${issue.progress_history.map(p => `
+                                    <div class="border-l-3 border-[var(--accent)] pl-4 py-2">
+                                        <div class="text-xs text-[var(--muted)] mb-1">
+                                            ${p.timestamp || ''} ${p.agent ? '- ' + p.agent : ''}
+                                        </div>
+                                        <div class="text-[var(--text)]">${p.progress}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- 交付物 -->
+                    ${issue.deliverables && issue.deliverables.length > 0 ? `
+                        <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
+                            <div class="text-sm text-[var(--muted)] mb-3">📦 交付物</div>
+                            <div class="space-y-2">
+                                ${issue.deliverables.map(d => `
+                                    <div class="stat-card rounded p-3">
+                                        <div class="font-bold text-[var(--accent)]">📄 ${d.file}</div>
+                                        ${d.description ? `<div class="text-sm text-[var(--muted)] mt-1">${d.description}</div>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
                     ` : ''}
                     
                     <!-- 解决方案 -->
                     ${issue.resolution ? `
-                        <div>
-                            <span class="text-sm text-[var(--muted)] block mb-2">✅ 解决方案</span>
-                            <div class="resolution-box rounded p-4 text-[var(--text)] whitespace-pre-wrap">${issue.resolution}</div>
+                        <div class="resolution-box rounded p-4">
+                            <div class="text-sm text-[var(--ok)] mb-3 font-bold">✅ 解决方案</div>
+                            <div class="text-[var(--text)] leading-relaxed">
+                                ${renderMarkdown(issue.resolution)}
+                            </div>
                         </div>
                     ` : ''}
                 </div>

@@ -85,3 +85,6 @@
 {"issue_id": 16, "timestamp": "2026-02-27T06:03:47.163564", "progress": "收到推文内容，开始分析 ohxiyu 置信度系统架构，研究与我们记忆系统的融合方案", "status": "in-progress", "agent": "coder"}
 {"issue_id": 16, "timestamp": "2026-02-27T06:04:58.613856", "progress": "完成调研：已分析 ohxiyu 置信度系统，输出融合方案报告到 memory/ohxiyu-confidence-system-research.md。推荐方案 A（轻量级融合）：在 MEMORY.md 注释中添加 confidence/source/last_accessed 字段，0 成本立即可做", "status": "review", "agent": "coder"}
 {"issue_id": 23, "timestamp": "2026-02-27T06:17:23.648978", "progress": "收到新要求：Dashboard 需要独立项目/仓库，不能放在 Issue Manager 里。开始创建独立 Dashboard 项目。", "status": "in-progress", "agent": "webby"}
+{"issue_id": 16, "timestamp": "2026-02-27T07:16:00.942957", "progress": "开始实现全自动记忆置信度系统：4 个核心组件（Indexer、Tracker、Decayer、Cleaner）", "status": "in-progress", "agent": "coder"}
+{"issue_id": 16, "timestamp": "2026-02-27T07:20:49.157599", "progress": "完成记忆置信度系统开发：4 个核心组件已实现并测试通过。初始扫描 114 条记忆，13 个 Agent workspace 全部索引完成", "status": "review", "agent": "coder"}
+{"issue_id": 23, "timestamp": "2026-02-27T07:21:20.149628", "progress": "收到反馈：1) 数据需实时获取 2) 主站添加入口 3) 删除 Usage 入口 4) 重新设计页面。开始修复。", "status": "in-progress", "agent": "webby"}

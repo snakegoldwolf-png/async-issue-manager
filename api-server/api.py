@@ -52,7 +52,7 @@ def load_index():
 
 @app.get("/", response_class=HTMLResponse)
 def root():
-    """主页占位"""
+    """主页"""
     return HTMLResponse(content="""
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -60,12 +60,12 @@ def root():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoryonClaw</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
         body {
-            font-family: 'VT323', 'Courier New', monospace;
-            background: linear-gradient(135deg, #1a2e1a 0%, #0f1f0f 100%);
-            color: #e8f5e8;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -75,38 +75,47 @@ def root():
             padding: 2rem;
         }
         h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ff9ecd 0%, #ffd700 100%);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-        p { color: #90b090; margin-bottom: 2rem; font-size: 1.2rem; }
+        p { color: #94a3b8; margin-bottom: 2.5rem; font-size: 1.2rem; }
+        .links { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
         a {
-            display: inline-block;
-            background: #3a5a3a;
-            color: #e8f5e8;
-            padding: 1rem 2rem;
-            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            color: #e2e8f0;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
             text-decoration: none;
-            border: 3px solid #5a8a5a;
+            border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.2s;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 500;
         }
         a:hover {
-            background: #4a6a4a;
-            border-color: #ff9ecd;
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
             transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .emoji { font-size: 4rem; margin-bottom: 1rem; }
+        .emoji { font-size: 5rem; margin-bottom: 1.5rem; }
     </style>
 </head>
 <body>
     <div class="emoji">🦎</div>
     <h1>LoryonClaw</h1>
     <p>AI Agent Team Workspace</p>
-    <a href="/issues">📋 Issue Dashboard</a>
+    <div class="links">
+        <a href="/dashboard">📊 Dashboard</a>
+        <a href="/issues">📋 Issues</a>
+    </div>
 </body>
 </html>
     """)
@@ -142,8 +151,8 @@ def issues_dashboard():
 
 @app.get("/issues/dashboard", response_class=HTMLResponse)
 @app.get("/issues/dashboard/", response_class=HTMLResponse)
-def dashboard_page():
-    """独立 Dashboard 页面"""
+def issues_dashboard_page():
+    """Issue Dashboard 页面（兼容旧路径）"""
     dashboard_file = WEB_DIR / "dashboard" / "index.html"
     if dashboard_file.exists():
         return HTMLResponse(content=dashboard_file.read_text(encoding="utf-8"))
@@ -151,7 +160,30 @@ def dashboard_page():
 
 
 @app.get("/issues/dashboard/data.json")
-def dashboard_data():
+def issues_dashboard_data():
+    """Dashboard 数据（兼容旧路径）"""
+    data_file = WEB_DIR / "dashboard" / "data.json"
+    if data_file.exists():
+        return JSONResponse(content=json.loads(data_file.read_text(encoding="utf-8")))
+    return JSONResponse(content={"error": "Data not found"}, status_code=404)
+
+
+# ========================================
+# 独立 Dashboard 路由 (/dashboard)
+# ========================================
+
+@app.get("/dashboard", response_class=HTMLResponse)
+@app.get("/dashboard/", response_class=HTMLResponse)
+def dashboard_main():
+    """独立 Dashboard 页面 - loryonclaw.me/dashboard"""
+    dashboard_file = WEB_DIR / "dashboard" / "index.html"
+    if dashboard_file.exists():
+        return HTMLResponse(content=dashboard_file.read_text(encoding="utf-8"))
+    return HTMLResponse(content="<h1>Dashboard not found</h1>", status_code=404)
+
+
+@app.get("/dashboard/data.json")
+def dashboard_main_data():
     """Dashboard 数据"""
     data_file = WEB_DIR / "dashboard" / "data.json"
     if data_file.exists():

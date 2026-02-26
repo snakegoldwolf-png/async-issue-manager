@@ -55,10 +55,7 @@ def parse_markdown_content(content: str) -> dict:
     result = {"body": "", "progress_history": [], "deliverables": []}
     
     lines = content.split("\n")
-    in_frontmatter = False
     body_lines = []
-    current_section = None
-    progress_entries = []
     
     i = 0
     # 跳过 frontmatter
@@ -68,47 +65,12 @@ def parse_markdown_content(content: str) -> dict:
             i += 1
         i += 1  # 跳过结束的 ---
     
-    # 解析正文
+    # 收集所有正文内容
     while i < len(lines):
-        line = lines[i]
-        
-        # 检测章节标题
-        if line.startswith("## "):
-            section_name = line[3:].strip().lower()
-            if "进度" in section_name or "progress" in section_name:
-                current_section = "progress"
-            elif "交付" in section_name or "deliverable" in section_name:
-                current_section = "deliverables"
-            elif "描述" in section_name or "description" in section_name or "问题" in section_name:
-                current_section = "body"
-            else:
-                current_section = "other"
-                body_lines.append(line)
-        elif current_section == "progress":
-            # 解析进度记录 (格式: - [时间] agent: 内容)
-            if line.strip().startswith("- "):
-                progress_entries.append(line.strip()[2:])
-        elif current_section == "deliverables":
-            if line.strip().startswith("- "):
-                result["deliverables"].append({
-                    "file": line.strip()[2:],
-                    "description": ""
-                })
-        else:
-            body_lines.append(line)
-        
+        body_lines.append(lines[i])
         i += 1
     
     result["body"] = "\n".join(body_lines).strip()
-    
-    # 转换进度记录
-    for entry in progress_entries:
-        result["progress_history"].append({
-            "timestamp": "",
-            "agent": "",
-            "progress": entry
-        })
-    
     return result
 
 
@@ -120,9 +82,11 @@ def get_issue(issue_id: int):
         if issue.get("id") == issue_id:
             # 尝试读取 Markdown 文件内容
             file_path = issue.get("file", "")
+            file_exists = False
             if file_path:
                 full_path = ISSUES_DIR.parent / file_path
                 if full_path.exists():
+                    file_exists = True
                     content = full_path.read_text(encoding="utf-8")
                     issue["content"] = content
                     # 解析 Markdown 内容
@@ -130,6 +94,17 @@ def get_issue(issue_id: int):
                     issue["body"] = parsed["body"]
                     issue["progress_history"] = parsed["progress_history"]
                     issue["deliverables"] = parsed["deliverables"]
+            
+            # 如果文件不存在，使用 resolution 作为 body
+            if not file_exists:
+                resolution = issue.get("resolution", "")
+                if resolution:
+                    issue["body"] = f"## 解决方案\n\n{resolution}"
+                else:
+                    issue["body"] = f"## {issue.get('title', 'Issue')}\n\n状态: {issue.get('status', 'unknown')}\n优先级: {issue.get('priority', 'unknown')}\n负责人: {issue.get('assignee', 'unassigned')}"
+                issue["progress_history"] = []
+                issue["deliverables"] = []
+            
             return issue
     raise HTTPException(status_code=404, detail=f"Issue #{issue_id} not found")
 

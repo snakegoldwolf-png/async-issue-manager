@@ -52,7 +52,7 @@ def load_index():
 
 @app.get("/", response_class=HTMLResponse)
 def root():
-    """主页"""
+    """主页占位"""
     return HTMLResponse(content="""
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -60,10 +60,10 @@ def root():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoryonClaw</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'VT323', 'Courier New', monospace; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
+            font-family: 'VT323', 'Courier New', monospace;
             background: linear-gradient(135deg, #1a2e1a 0%, #0f1f0f 100%);
             color: #e8f5e8;
             min-height: 100vh;
@@ -73,37 +73,34 @@ def root():
             justify-content: center;
             text-align: center;
             padding: 2rem;
-            image-rendering: pixelated;
         }
         h1 {
-            font-size: 3.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 3rem;
+            margin-bottom: 1rem;
             background: linear-gradient(135deg, #ff9ecd 0%, #ffd700 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        p { color: #90b090; margin-bottom: 2.5rem; font-size: 1.5rem; }
+        p { color: #90b090; margin-bottom: 2rem; font-size: 1.2rem; }
         .links { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
         a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            display: inline-block;
             background: #3a5a3a;
             color: #e8f5e8;
-            padding: 1rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 8px;
             text-decoration: none;
             border: 3px solid #5a8a5a;
             transition: all 0.2s;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
         a:hover {
             background: #4a6a4a;
             border-color: #ff9ecd;
             transform: translateY(-2px);
-            color: #ff9ecd;
         }
-        .emoji { font-size: 5rem; margin-bottom: 1.5rem; }
+        .emoji { font-size: 4rem; margin-bottom: 1rem; }
     </style>
 </head>
 <body>

@@ -4,135 +4,208 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoryonClaw Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; }
-        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        .stat-card { transition: transform 0.2s, box-shadow 0.2s; }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        :root {
+            --bg: #1a2e1a;
+            --bg-accent: #243524;
+            --bg-elevated: #2e422e;
+            --card: #3a5a3a;
+            --text: #e8f5e8;
+            --text-strong: #f0fff0;
+            --muted: #90b090;
+            --border: #4a6a4a;
+            --border-strong: #5a8a5a;
+            --accent: #ff9ecd;
+            --accent-hover: #ffb8db;
+            --ok: #7cb342;
+            --warn: #ffb300;
+        }
+
+        * { font-family: 'VT323', 'Courier New', monospace !important; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            image-rendering: pixelated;
+        }
+
+        .pixel-border {
+            border: 3px solid var(--border);
+            box-shadow: 
+                inset -2px -2px 0 var(--bg),
+                inset 2px 2px 0 var(--border-strong);
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 3px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .btn-pixel {
+            background: var(--card);
+            border: 3px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-pixel:hover {
+            background: var(--bg-elevated);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .progress-bar {
+            background: var(--bg-accent);
+            border: 2px solid var(--border);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--ok) 0%, var(--accent) 100%);
+            transition: width 0.5s ease;
+        }
+
+        .agent-row:hover {
+            background: var(--bg-elevated);
+        }
+
+        .big-number {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 640px) {
+            .big-number { font-size: 2rem; }
+        }
+
+        /* 像素图标 */
+        .px-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            image-rendering: pixelated;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        .px-icon-lg { width: 24px; height: 24px; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
         .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .glow { box-shadow: 0 0 30px rgba(96, 165, 250, 0.3); }
     </style>
 </head>
-<body class="text-white p-4 md:p-8">
+<body class="p-4 md:p-8">
     <!-- Header -->
-    <header class="max-w-6xl mx-auto mb-8">
+    <header class="max-w-5xl mx-auto mb-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-3xl md:text-4xl font-bold gradient-text">LoryonClaw Dashboard</h1>
-                <p class="text-slate-400 mt-1">实时 Token & API 使用统计</p>
+                <h1 class="text-3xl md:text-4xl text-[var(--accent)]">
+                    <svg class="px-icon px-icon-lg" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="10" width="2" height="4"/><rect x="5" y="7" width="2" height="7"/><rect x="8" y="4" width="2" height="10"/><rect x="11" y="2" width="2" height="12"/></svg>
+                    LoryonClaw Dashboard
+                </h1>
+                <p class="text-[var(--muted)] mt-1">Token & API 使用统计</p>
             </div>
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-slate-500" id="last-update">更新中...</span>
-                <button onclick="loadData()" class="glass px-4 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-[var(--muted)]" id="last-update">更新中...</span>
+                <button onclick="loadData()" class="btn-pixel px-3 py-2 rounded flex items-center gap-2">
+                    <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 2v2h4v4h2V2H8zM2 10v4h6v-2H4v-4H2z"/><rect x="6" y="6" width="4" height="4"/></svg>
                     刷新
                 </button>
-                <a href="/issues" class="glass px-4 py-2 rounded-lg hover:bg-white/10 transition">📋 Issues</a>
+                <a href="/issues" class="btn-pixel px-3 py-2 rounded flex items-center gap-2" style="text-decoration: none;">
+                    <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="2"/><rect x="2" y="6" width="8" height="2"/><rect x="2" y="10" width="10" height="2"/><rect x="2" y="14" width="6" height="2"/></svg>
+                    Issues
+                </a>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto">
+    <main class="max-w-5xl mx-auto">
         <!-- Like·AI API Stats -->
         <section class="mb-8">
-            <h2 class="text-xl font-semibold text-slate-300 mb-4 flex items-center gap-2">
-                <span class="w-2 h-2 bg-blue-500 rounded-full pulse"></span>
+            <h2 class="text-xl text-[var(--accent)] mb-4 flex items-center gap-2">
+                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="2" width="8" height="2"/><rect x="2" y="4" width="12" height="8"/><rect x="4" y="12" width="8" height="2"/><rect x="6" y="6" width="4" height="4" fill="var(--bg)"/></svg>
                 Like·AI API
+                <span class="w-2 h-2 bg-[var(--ok)] rounded-full pulse"></span>
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass stat-card rounded-2xl p-6 glow">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-slate-400 text-sm mb-1">API 请求数</p>
-                            <p class="text-4xl font-bold text-blue-400" id="api-requests">-</p>
-                        </div>
-                        <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        </div>
-                    </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="stat-card pixel-border rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">API 请求数</div>
+                    <div class="big-number text-[var(--accent)]" id="api-requests">-</div>
                 </div>
-                <div class="glass stat-card rounded-2xl p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-slate-400 text-sm mb-1">API Token 数</p>
-                            <p class="text-4xl font-bold text-purple-400" id="api-tokens">-</p>
-                        </div>
-                        <div class="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                        </div>
-                    </div>
+                <div class="stat-card pixel-border rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">API Token 数</div>
+                    <div class="big-number text-[var(--ok)]" id="api-tokens">-</div>
                 </div>
             </div>
         </section>
 
         <!-- Local Agent Stats -->
         <section class="mb-8">
-            <h2 class="text-xl font-semibold text-slate-300 mb-4 flex items-center gap-2">
-                <span class="w-2 h-2 bg-green-500 rounded-full pulse"></span>
+            <h2 class="text-xl text-[var(--accent)] mb-4 flex items-center gap-2">
+                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="6" y="2" width="4" height="4"/><rect x="4" y="6" width="8" height="6"/><rect x="2" y="12" width="4" height="2"/><rect x="10" y="12" width="4" height="2"/></svg>
                 本地 Agent 统计
             </h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="glass stat-card rounded-2xl p-5">
-                    <p class="text-slate-400 text-sm mb-1">总 Token</p>
-                    <p class="text-2xl font-bold text-emerald-400" id="local-tokens">-</p>
+                <div class="stat-card pixel-border rounded-lg p-4 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-1">总 Token</div>
+                    <div class="text-2xl text-[var(--accent)]" id="local-tokens">-</div>
                 </div>
-                <div class="glass stat-card rounded-2xl p-5">
-                    <p class="text-slate-400 text-sm mb-1">总请求</p>
-                    <p class="text-2xl font-bold text-cyan-400" id="local-requests">-</p>
+                <div class="stat-card pixel-border rounded-lg p-4 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-1">总请求</div>
+                    <div class="text-2xl text-[var(--ok)]" id="local-requests">-</div>
                 </div>
-                <div class="glass stat-card rounded-2xl p-5">
-                    <p class="text-slate-400 text-sm mb-1">Agent 数</p>
-                    <p class="text-2xl font-bold text-amber-400" id="agent-count">-</p>
+                <div class="stat-card pixel-border rounded-lg p-4 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-1">Agent 数</div>
+                    <div class="text-2xl text-[var(--warn)]" id="agent-count">-</div>
                 </div>
-                <div class="glass stat-card rounded-2xl p-5">
-                    <p class="text-slate-400 text-sm mb-1">Session 数</p>
-                    <p class="text-2xl font-bold text-rose-400" id="session-count">-</p>
+                <div class="stat-card pixel-border rounded-lg p-4 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-1">Session 数</div>
+                    <div class="text-2xl text-[var(--text)]" id="session-count">-</div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Agent Usage Chart -->
-        <section class="mb-8">
-            <h2 class="text-xl font-semibold text-slate-300 mb-4">Agent Token 使用分布</h2>
-            <div class="glass rounded-2xl p-6">
-                <canvas id="agentChart" height="300"></canvas>
             </div>
         </section>
 
         <!-- Top Agents Table -->
-        <section>
-            <h2 class="text-xl font-semibold text-slate-300 mb-4">Top Agents</h2>
-            <div class="glass rounded-2xl overflow-hidden">
+        <section class="pixel-border rounded-lg p-4" style="background: var(--bg-accent);">
+            <h2 class="text-xl text-[var(--accent)] mb-4 flex items-center gap-2">
+                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="4" height="12"/><rect x="8" y="6" width="4" height="8"/><rect x="14" y="10" width="0" height="4"/></svg>
+                Agent 排行榜
+            </h2>
+            <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-white/5">
-                        <tr class="text-slate-400 text-sm">
-                            <th class="text-left py-3 px-4">#</th>
-                            <th class="text-left py-3 px-4">Agent</th>
-                            <th class="text-left py-3 px-4">Tokens</th>
-                            <th class="text-left py-3 px-4 hidden md:table-cell">Requests</th>
-                            <th class="text-left py-3 px-4">占比</th>
+                    <thead>
+                        <tr class="text-[var(--muted)] text-left border-b border-[var(--border)]">
+                            <th class="py-2 px-2">#</th>
+                            <th class="py-2 px-2">Agent</th>
+                            <th class="py-2 px-2">Tokens</th>
+                            <th class="py-2 px-2 hidden md:table-cell">Requests</th>
+                            <th class="py-2 px-2 w-32">占比</th>
                         </tr>
                     </thead>
                     <tbody id="agent-table">
-                        <tr><td colspan="5" class="py-8 text-center text-slate-500">加载中...</td></tr>
+                        <tr><td colspan="5" class="py-4 text-center text-[var(--muted)]">加载中...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <footer class="max-w-6xl mx-auto mt-12 text-center text-slate-500 text-sm">
+    <footer class="max-w-5xl mx-auto mt-8 text-center text-[var(--muted)] text-sm">
         <p>LoryonClaw Dashboard · 数据每 30 秒自动刷新</p>
     </footer>
 
     <script>
-        let agentChart = null;
         const API_URL = '/issues/api/usage';
 
         function formatNumber(num) {
@@ -165,56 +238,27 @@
                 // Agent Table
                 const agents = (data.by_agent || []).slice(0, 10);
                 const totalTokens = s.total_tokens || 1;
-                const colors = ['#60a5fa', '#a78bfa', '#f472b6', '#34d399', '#fbbf24', '#fb7185', '#38bdf8', '#c084fc', '#4ade80', '#f97316'];
+                const maxTokens = agents.length > 0 ? agents[0].total_tokens : 1;
 
                 const tableHtml = agents.map((a, i) => {
                     const pct = ((a.total_tokens / totalTokens) * 100).toFixed(1);
+                    const barWidth = (a.total_tokens / maxTokens) * 100;
                     return `
-                        <tr class="border-t border-white/5 hover:bg-white/5 transition">
-                            <td class="py-3 px-4 text-slate-500">${i + 1}</td>
-                            <td class="py-3 px-4 font-medium" style="color: ${colors[i]}">${a.name}</td>
-                            <td class="py-3 px-4">${formatNumber(a.total_tokens)}</td>
-                            <td class="py-3 px-4 hidden md:table-cell text-slate-400">${formatNumber(a.requests)}</td>
-                            <td class="py-3 px-4">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-20 h-2 bg-white/10 rounded-full overflow-hidden">
-                                        <div class="h-full rounded-full" style="width: ${pct}%; background: ${colors[i]}"></div>
-                                    </div>
-                                    <span class="text-sm text-slate-400">${pct}%</span>
+                        <tr class="agent-row border-b border-[var(--border)]">
+                            <td class="py-2 px-2 text-[var(--muted)]">${i + 1}</td>
+                            <td class="py-2 px-2 font-bold text-[var(--accent)]">${a.name}</td>
+                            <td class="py-2 px-2">${formatNumber(a.total_tokens)}</td>
+                            <td class="py-2 px-2 hidden md:table-cell text-[var(--muted)]">${formatNumber(a.requests)}</td>
+                            <td class="py-2 px-2">
+                                <div class="progress-bar rounded h-4 relative">
+                                    <div class="progress-fill h-full rounded" style="width: ${barWidth}%"></div>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs">${pct}%</span>
                                 </div>
                             </td>
                         </tr>
                     `;
                 }).join('');
-                document.getElementById('agent-table').innerHTML = tableHtml || '<tr><td colspan="5" class="py-8 text-center text-slate-500">无数据</td></tr>';
-
-                // Chart
-                const chartData = agents.slice(0, 6);
-                if (agentChart) agentChart.destroy();
-                const ctx = document.getElementById('agentChart').getContext('2d');
-                agentChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: chartData.map(a => a.name),
-                        datasets: [{
-                            data: chartData.map(a => a.total_tokens),
-                            backgroundColor: colors.slice(0, chartData.length),
-                            borderWidth: 0,
-                            hoverOffset: 10
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'right',
-                                labels: { color: '#94a3b8', font: { size: 13 }, padding: 15 }
-                            }
-                        },
-                        cutout: '60%'
-                    }
-                });
+                document.getElementById('agent-table').innerHTML = tableHtml || '<tr><td colspan="5" class="py-4 text-center text-[var(--muted)]">无数据</td></tr>';
 
                 // Update time
                 document.getElementById('last-update').textContent = '更新于 ' + new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });

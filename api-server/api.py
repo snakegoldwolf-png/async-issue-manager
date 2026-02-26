@@ -60,12 +60,12 @@ def root():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoryonClaw</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'VT323', 'Courier New', monospace; }
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
+            background: linear-gradient(135deg, #1a2e1a 0%, #0f1f0f 100%);
+            color: #e8f5e8;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -73,37 +73,35 @@ def root():
             justify-content: center;
             text-align: center;
             padding: 2rem;
+            image-rendering: pixelated;
         }
         h1 {
             font-size: 3.5rem;
-            font-weight: 700;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            background: linear-gradient(135deg, #ff9ecd 0%, #ffd700 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        p { color: #94a3b8; margin-bottom: 2.5rem; font-size: 1.2rem; }
+        p { color: #90b090; margin-bottom: 2.5rem; font-size: 1.5rem; }
         .links { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
         a {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            color: #e2e8f0;
+            background: #3a5a3a;
+            color: #e8f5e8;
             padding: 1rem 1.5rem;
-            border-radius: 12px;
+            border-radius: 8px;
             text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 3px solid #5a8a5a;
             transition: all 0.2s;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 1.3rem;
         }
         a:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.2);
+            background: #4a6a4a;
+            border-color: #ff9ecd;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: #ff9ecd;
         }
         .emoji { font-size: 5rem; margin-bottom: 1.5rem; }
     </style>

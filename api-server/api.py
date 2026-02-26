@@ -25,6 +25,8 @@ app.add_middleware(
 # Issue 数据目录
 ISSUES_DIR = Path.home() / ".openclaw/shared/async-issue-manager/.issues"
 INDEX_FILE = ISSUES_DIR / "index.json"
+PROGRESS_FILE = ISSUES_DIR / "progress.jsonl"
+DELIVERABLES_FILE = ISSUES_DIR / "deliverables/index.json"
 
 
 def load_index():
@@ -74,6 +76,39 @@ def parse_markdown_content(content: str) -> dict:
     return result
 
 
+def load_progress(issue_id: int) -> list:
+    """从 progress.jsonl 加载指定 Issue 的进度记录"""
+    progress_list = []
+    if PROGRESS_FILE.exists():
+        with open(PROGRESS_FILE, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        record = json.loads(line)
+                        if record.get('issue_id') == issue_id:
+                            progress_list.append(record)
+                    except json.JSONDecodeError:
+                        continue
+    # 按时间倒序排列（最新的在前）
+    progress_list.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+    return progress_list
+
+
+def load_deliverables(issue_id: int) -> list:
+    """从 deliverables/index.json 加载指定 Issue 的交付物"""
+    deliverables_list = []
+    if DELIVERABLES_FILE.exists():
+        try:
+            data = json.loads(DELIVERABLES_FILE.read_text(encoding='utf-8'))
+            for item in data.get('deliverables', []):
+                if item.get('issue_id') == issue_id:
+                    deliverables_list.append(item)
+        except json.JSONDecodeError:
+            pass
+    return deliverables_list
+
+
 @app.get("/api/issues/{issue_id}")
 def get_issue(issue_id: int):
     """获取单个 Issue 详情"""
@@ -92,8 +127,6 @@ def get_issue(issue_id: int):
                     # 解析 Markdown 内容
                     parsed = parse_markdown_content(content)
                     issue["body"] = parsed["body"]
-                    issue["progress_history"] = parsed["progress_history"]
-                    issue["deliverables"] = parsed["deliverables"]
             
             # 如果文件不存在，使用 resolution 作为 body
             if not file_exists:
@@ -102,8 +135,10 @@ def get_issue(issue_id: int):
                     issue["body"] = f"## 解决方案\n\n{resolution}"
                 else:
                     issue["body"] = f"## {issue.get('title', 'Issue')}\n\n状态: {issue.get('status', 'unknown')}\n优先级: {issue.get('priority', 'unknown')}\n负责人: {issue.get('assignee', 'unassigned')}"
-                issue["progress_history"] = []
-                issue["deliverables"] = []
+            
+            # 加载进度记录和交付物
+            issue["progress_history"] = load_progress(issue_id)
+            issue["deliverables"] = load_deliverables(issue_id)
             
             return issue
     raise HTTPException(status_code=404, detail=f"Issue #{issue_id} not found")

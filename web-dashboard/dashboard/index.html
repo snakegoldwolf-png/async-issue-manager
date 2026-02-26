@@ -10,267 +10,102 @@
         :root {
             --bg: #1a2e1a;
             --bg-accent: #243524;
-            --bg-elevated: #2e422e;
             --card: #3a5a3a;
             --text: #e8f5e8;
-            --text-strong: #f0fff0;
             --muted: #90b090;
             --border: #4a6a4a;
-            --border-strong: #5a8a5a;
             --accent: #ff9ecd;
-            --accent-hover: #ffb8db;
             --ok: #7cb342;
             --warn: #ffb300;
-            --danger: #e53935;
         }
-
-        * { font-family: 'VT323', 'Courier New', monospace !important; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        .pixel-border {
-            border: 3px solid var(--border);
-            box-shadow: 
-                inset -2px -2px 0 var(--bg),
-                inset 2px 2px 0 var(--border-strong);
-        }
-
+        * { font-family: 'VT323', monospace !important; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
         .stat-card {
             background: var(--card);
             border: 3px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .progress-bar {
-            background: var(--bg-accent);
-            border: 2px solid var(--border);
-        }
-
-        .progress-fill {
-            background: linear-gradient(90deg, var(--ok) 0%, var(--accent) 100%);
-            transition: width 0.5s ease;
-        }
-
-        .agent-row:hover {
-            background: var(--bg-elevated);
-        }
-
-        .nav-link {
-            color: var(--muted);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-link:hover {
-            color: var(--accent);
-            background: var(--bg-accent);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .loading {
-            animation: pulse 1.5s infinite;
-        }
-
-        .big-number {
-            font-size: 3rem;
-            line-height: 1;
-        }
-
-        @media (max-width: 640px) {
-            .big-number {
-                font-size: 2rem;
-            }
-        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .big-number { font-size: 3rem; line-height: 1; }
+        @media (max-width: 640px) { .big-number { font-size: 2rem; } }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <!-- Header -->
-    <header class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-                <h1 class="text-3xl md:text-4xl text-[var(--accent)] flex items-center gap-3">
-                    📊 LoryonClaw Dashboard
-                </h1>
-                <p class="text-[var(--muted)] mt-1">Token & API 使用统计</p>
-            </div>
-            <nav class="flex gap-2">
-                <a href="/issues" class="nav-link">📋 Issues</a>
-                <button onclick="loadData()" class="nav-link cursor-pointer">🔄 刷新</button>
-            </nav>
-        </div>
+<body class="p-6 md:p-12">
+    <header class="mb-10 text-center">
+        <h1 class="text-4xl md:text-5xl text-[var(--accent)]">📊 LoryonClaw Dashboard</h1>
+        <p class="text-[var(--muted)] mt-2">Token & API 使用统计</p>
+        <p class="text-sm text-[var(--muted)]" id="updated"></p>
     </header>
 
-    <!-- Like·AI Stats (Primary) -->
-    <div class="pixel-border rounded-lg p-6 mb-8" style="background: var(--bg-accent);">
-        <h2 class="text-2xl text-[var(--accent)] mb-6 flex items-center gap-2">
-            ☁️ Like·AI API 统计
-            <span class="text-sm text-[var(--muted)]" id="likeai-updated"></span>
-        </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="stat-card rounded-lg p-6 text-center">
-                <div class="text-sm text-[var(--muted)] mb-2">API 请求数</div>
-                <div class="big-number text-[var(--accent)]" id="likeai-requests">-</div>
+    <main class="max-w-5xl mx-auto">
+        <!-- Like·AI Stats -->
+        <section class="mb-10">
+            <h2 class="text-2xl text-[var(--accent)] mb-4">☁️ Like·AI API</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">API 请求数</div>
+                    <div class="big-number text-[var(--accent)]" id="api-requests">-</div>
+                </div>
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">API Token 数</div>
+                    <div class="big-number text-[var(--ok)]" id="api-tokens">-</div>
+                </div>
             </div>
-            <div class="stat-card rounded-lg p-6 text-center">
-                <div class="text-sm text-[var(--muted)] mb-2">Token 使用量</div>
-                <div class="big-number text-[var(--ok)]" id="likeai-tokens">-</div>
-            </div>
-            <div class="stat-card rounded-lg p-6 text-center">
-                <div class="text-sm text-[var(--muted)] mb-2">套餐类型</div>
-                <div class="text-2xl text-[var(--text)]" id="likeai-plan">-</div>
-            </div>
-            <div class="stat-card rounded-lg p-6 text-center">
-                <div class="text-sm text-[var(--muted)] mb-2">剩余时间</div>
-                <div class="big-number text-[var(--warn)]" id="likeai-balance">-</div>
-            </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Local Agent Stats -->
-    <div class="pixel-border rounded-lg p-6 mb-8" style="background: var(--bg-accent);">
-        <h2 class="text-2xl text-[var(--accent)] mb-6">🤖 本地 Agent 统计</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="stat-card rounded-lg p-4 text-center">
-                <div class="text-sm text-[var(--muted)] mb-1">总 Token 数</div>
-                <div class="text-2xl text-[var(--accent)]" id="total-tokens">-</div>
+        <!-- Local Stats -->
+        <section class="mb-10">
+            <h2 class="text-2xl text-[var(--accent)] mb-4">🤖 本地 Agent 统计</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">总 Token 数</div>
+                    <div class="big-number text-[var(--accent)]" id="local-tokens">-</div>
+                </div>
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">总请求数</div>
+                    <div class="big-number text-[var(--ok)]" id="local-requests">-</div>
+                </div>
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">Agent 数</div>
+                    <div class="big-number text-[var(--warn)]" id="agents">-</div>
+                </div>
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-sm text-[var(--muted)] mb-2">Session 数</div>
+                    <div class="big-number text-[var(--text)]" id="sessions">-</div>
+                </div>
             </div>
-            <div class="stat-card rounded-lg p-4 text-center">
-                <div class="text-sm text-[var(--muted)] mb-1">总请求数</div>
-                <div class="text-2xl text-[var(--ok)]" id="total-requests">-</div>
-            </div>
-            <div class="stat-card rounded-lg p-4 text-center">
-                <div class="text-sm text-[var(--muted)] mb-1">Agent 数</div>
-                <div class="text-2xl text-[var(--warn)]" id="agent-count">-</div>
-            </div>
-            <div class="stat-card rounded-lg p-4 text-center">
-                <div class="text-sm text-[var(--muted)] mb-1">Session 数</div>
-                <div class="text-2xl text-[var(--text)]" id="session-count">-</div>
-            </div>
-        </div>
+        </section>
 
-        <!-- Agent Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="text-[var(--muted)] text-left border-b border-[var(--border)]">
-                        <th class="py-2 px-2">#</th>
-                        <th class="py-2 px-2">Agent</th>
-                        <th class="py-2 px-2">Total Tokens</th>
-                        <th class="py-2 px-2 hidden md:table-cell">Requests</th>
-                        <th class="py-2 px-2 w-32">占比</th>
-                    </tr>
-                </thead>
-                <tbody id="agent-table">
-                    <tr><td colspan="5" class="py-4 text-center text-[var(--muted)] loading">加载中...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <!-- Links -->
+        <section class="text-center">
+            <a href="/issues" class="text-[var(--accent)] hover:underline text-xl">📋 查看 Issues</a>
+        </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="text-center text-[var(--muted)] text-sm mt-8">
-        <p>LoryonClaw Dashboard · 数据每分钟自动刷新</p>
+    <footer class="text-center text-[var(--muted)] text-sm mt-12">
+        <p>LoryonClaw · 数据每分钟刷新</p>
     </footer>
 
     <script>
-        // 从 API 加载数据
-        const API_URL = '/issues/api/usage';
-
-        function formatNumber(num) {
-            if (typeof num === 'string') return num;
-            if (num >= 1000000000) return (num / 1000000000).toFixed(2) + 'B';
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
-        }
-
-        function formatNumberFull(num) {
-            if (typeof num === 'string') return num;
-            return num.toLocaleString();
-        }
-
-        async function loadData() {
+        async function load() {
             try {
-                const res = await fetch(API_URL + '?t=' + Date.now());
-                const data = await res.json();
-                
-                // Like·AI Stats
-                if (data.likeai && data.likeai.data) {
-                    const ld = data.likeai.data;
-                    document.getElementById('likeai-requests').textContent = formatNumber(ld.total_requests || 0);
-                    document.getElementById('likeai-tokens').textContent = ld.total_tokens || '-';
-                    document.getElementById('likeai-plan').textContent = ld.keys && ld.keys[0] ? ld.keys[0].group : '-';
-                    document.getElementById('likeai-balance').textContent = ld.keys && ld.keys[0] ? ld.keys[0].balance : '-';
-                    
-                    if (data.likeai.fetched_at) {
-                        const fetchedDate = new Date(data.likeai.fetched_at);
-                        document.getElementById('likeai-updated').textContent = 
-                            '更新于 ' + fetchedDate.toLocaleString('zh-CN', { 
-                                month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' 
-                            });
-                    }
+                const res = await fetch('./data.json?t=' + Date.now());
+                const d = await res.json();
+                document.getElementById('api-requests').textContent = d.requests || '-';
+                document.getElementById('api-tokens').textContent = d.tokens || '-';
+                document.getElementById('local-tokens').textContent = d.local_tokens || '-';
+                document.getElementById('local-requests').textContent = d.local_requests || '-';
+                document.getElementById('agents').textContent = d.agents || '-';
+                document.getElementById('sessions').textContent = d.sessions || '-';
+                if (d.updated) {
+                    document.getElementById('updated').textContent = '更新于 ' + d.updated;
                 }
-
-                // Local Stats
-                const summary = data.summary || {};
-                document.getElementById('total-tokens').textContent = formatNumber(summary.total_tokens || 0);
-                document.getElementById('total-tokens').title = formatNumberFull(summary.total_tokens || 0);
-                document.getElementById('total-requests').textContent = formatNumber(summary.total_requests || 0);
-                document.getElementById('agent-count').textContent = summary.agent_count || 0;
-                document.getElementById('session-count').textContent = formatNumber(summary.session_count || 0);
-
-                // Agent Table
-                const agents = data.by_agent || [];
-                const maxTokens = agents.length > 0 ? agents[0].total_tokens : 1;
-                const totalTokens = summary.total_tokens || 1;
-                
-                const agentHtml = agents.slice(0, 15).map((agent, idx) => {
-                    const percent = ((agent.total_tokens / totalTokens) * 100).toFixed(1);
-                    const barWidth = (agent.total_tokens / maxTokens) * 100;
-                    return `
-                        <tr class="agent-row border-b border-[var(--border)]">
-                            <td class="py-2 px-2 text-[var(--muted)]">${idx + 1}</td>
-                            <td class="py-2 px-2 font-bold text-[var(--accent)]">${agent.name}</td>
-                            <td class="py-2 px-2" title="${formatNumberFull(agent.total_tokens)}">${formatNumber(agent.total_tokens)}</td>
-                            <td class="py-2 px-2 hidden md:table-cell">${formatNumber(agent.requests)}</td>
-                            <td class="py-2 px-2">
-                                <div class="progress-bar rounded h-4 relative">
-                                    <div class="progress-fill h-full rounded" style="width: ${barWidth}%"></div>
-                                    <span class="absolute inset-0 flex items-center justify-center text-xs">${percent}%</span>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-                
-                document.getElementById('agent-table').innerHTML = agentHtml || '<tr><td colspan="5" class="py-4 text-center text-[var(--muted)]">无数据</td></tr>';
-
-            } catch (err) {
-                console.error('Failed to load data:', err);
-                document.getElementById('agent-table').innerHTML = '<tr><td colspan="5" class="py-4 text-center text-[var(--danger)]">加载失败，请刷新重试</td></tr>';
+            } catch (e) {
+                console.error(e);
             }
         }
-
-        // Load on page load
-        loadData();
-        
-        // Auto refresh every 60 seconds
-        setInterval(loadData, 60000);
+        load();
+        setInterval(load, 60000);
     </script>
 </body>
 </html>

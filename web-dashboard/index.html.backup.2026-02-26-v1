@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="stardew-spring" data-density="normal" data-font-size="medium">
+<html lang="zh-CN" data-theme="stardew-spring">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Issue Dashboard - 星露谷风格</title>
+    <title>🌾 Issue Dashboard - 星露谷风格</title>
+    <!-- 像素字体 -->
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* ========================================
-           四季主题变量
+           🌸 星露谷物语 - 春季主题
            ======================================== */
-        :root, [data-theme="stardew-spring"] {
+        :root {
             --bg: #1a2e1a;
             --bg-accent: #243524;
             --bg-elevated: #2e422e;
             --card: #3a5a3a;
+            --card-foreground: #e8f5e8;
             --text: #e8f5e8;
             --text-strong: #f0fff0;
             --muted: #90b090;
@@ -26,97 +28,41 @@
             --ok: #7cb342;
             --warn: #ffb300;
             --danger: #e53935;
-            --season-icon: "🌸";
-        }
-        
-        [data-theme="stardew-summer"] {
-            --bg: #1a2a3a;
-            --bg-accent: #243444;
-            --bg-elevated: #2e4454;
-            --card: #3a5a7a;
-            --text: #e8f0f8;
-            --text-strong: #f0f8ff;
-            --muted: #90a0b0;
-            --border: #4a6a8a;
-            --border-strong: #5a8aaa;
-            --accent: #ffd700;
-            --accent-hover: #ffe44d;
-            --accent-glow: rgba(255, 215, 0, 0.35);
-            --season-icon: "☀️";
-        }
-        
-        [data-theme="stardew-autumn"] {
-            --bg: #2a1a1a;
-            --bg-accent: #3a2424;
-            --bg-elevated: #4a2e2e;
-            --card: #5a3a3a;
-            --text: #f8e8e0;
-            --text-strong: #fff0e8;
-            --muted: #b09080;
-            --border: #6a4a4a;
-            --border-strong: #8a5a5a;
-            --accent: #ff6b35;
-            --accent-hover: #ff8855;
-            --accent-glow: rgba(255, 107, 53, 0.35);
-            --season-icon: "🍂";
-        }
-        
-        [data-theme="stardew-winter"] {
-            --bg: #1a1a2e;
-            --bg-accent: #242434;
-            --bg-elevated: #2e2e42;
-            --card: #3a3a5a;
-            --text: #e8e8f8;
-            --text-strong: #f0f0ff;
-            --muted: #9090b0;
-            --border: #4a4a6a;
-            --border-strong: #5a5a8a;
-            --accent: #87ceeb;
-            --accent-hover: #a0d8ef;
-            --accent-glow: rgba(135, 206, 235, 0.35);
-            --season-icon: "❄️";
+            --font-pixel: 'VT323', 'Courier New', monospace;
+            --font-display: 'Press Start 2P', 'VT323', monospace;
         }
 
-        /* 字体大小 */
-        [data-font-size="small"] { font-size: 14px !important; }
-        [data-font-size="medium"] { font-size: 18px !important; }
-        [data-font-size="large"] { font-size: 22px !important; }
-        
-        /* 显示密度 */
-        [data-density="compact"] .issue-card { padding: 0.5rem !important; }
-        [data-density="compact"] .stat-card { padding: 0.5rem !important; }
-        [data-density="normal"] .issue-card { padding: 1rem !important; }
-        [data-density="normal"] .stat-card { padding: 1rem !important; }
-        [data-density="comfortable"] .issue-card { padding: 1.5rem !important; }
-        [data-density="comfortable"] .stat-card { padding: 1.5rem !important; }
-
-        * { font-family: 'VT323', 'Courier New', monospace !important; }
+        * {
+            font-family: var(--font-pixel) !important;
+        }
 
         body {
             background: var(--bg);
             color: var(--text);
+            font-size: 18px;
             letter-spacing: 0.02em;
             image-rendering: pixelated;
             min-height: 100vh;
         }
 
-        /* 像素图标 - SVG 内联 */
-        .px-icon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            image-rendering: pixelated;
-            vertical-align: middle;
-            margin-right: 4px;
-        }
-        .px-icon-lg { width: 20px; height: 20px; }
-        
         /* 像素风格滚动条 */
-        ::-webkit-scrollbar { width: 12px; height: 12px; }
-        ::-webkit-scrollbar-track { background: var(--bg-accent); border: 2px solid var(--border); }
-        ::-webkit-scrollbar-thumb { background: var(--border-strong); border: 2px solid var(--border); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-accent);
+            border: 2px solid var(--border);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border: 2px solid var(--border);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
 
+        /* 像素边框效果 */
         .pixel-border {
             border: 3px solid var(--border-strong) !important;
             box-shadow: 3px 3px 0 rgba(0, 20, 0, 0.5);
@@ -126,12 +72,14 @@
             box-shadow: 4px 4px 0 rgba(0, 20, 0, 0.5), 0 0 15px var(--accent-glow);
         }
 
+        /* Header 像素风格 */
         .header-pixel {
             background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-accent) 100%);
             border-bottom: 4px solid var(--border-strong);
             box-shadow: 0 4px 0 rgba(0, 20, 0, 0.3);
         }
 
+        /* 统计卡片 */
         .stat-card {
             background: var(--card);
             border: 3px solid var(--border-strong);
@@ -143,6 +91,7 @@
             box-shadow: 5px 5px 0 rgba(0, 20, 0, 0.5);
         }
 
+        /* Issue 卡片 */
         .issue-card {
             background: var(--card);
             border: 3px solid var(--border-strong);
@@ -156,15 +105,52 @@
             box-shadow: 5px 5px 0 rgba(0, 20, 0, 0.5), 0 0 20px var(--accent-glow);
         }
 
-        .priority-P0 { background: #e53935; color: #fff; border: 2px solid #b71c1c; text-shadow: 1px 1px 0 #000; }
-        .priority-P1 { background: #ff9800; color: #fff; border: 2px solid #e65100; text-shadow: 1px 1px 0 #000; }
-        .priority-P2 { background: #ffc107; color: #000; border: 2px solid #ff8f00; }
-        .priority-P3 { background: #4caf50; color: #fff; border: 2px solid #2e7d32; text-shadow: 1px 1px 0 #000; }
+        /* 优先级标签 - 像素风格 */
+        .priority-P0 {
+            background: #e53935;
+            color: #fff;
+            border: 2px solid #b71c1c;
+            text-shadow: 1px 1px 0 #000;
+        }
+        .priority-P1 {
+            background: #ff9800;
+            color: #fff;
+            border: 2px solid #e65100;
+            text-shadow: 1px 1px 0 #000;
+        }
+        .priority-P2 {
+            background: #ffc107;
+            color: #000;
+            border: 2px solid #ff8f00;
+        }
+        .priority-P3 {
+            background: #4caf50;
+            color: #fff;
+            border: 2px solid #2e7d32;
+            text-shadow: 1px 1px 0 #000;
+        }
 
-        .status-open { background: #2196f3; color: #fff; border: 2px solid #1565c0; text-shadow: 1px 1px 0 #000; }
-        .status-in-progress { background: #9c27b0; color: #fff; border: 2px solid #6a1b9a; text-shadow: 1px 1px 0 #000; }
-        .status-closed { background: #607d8b; color: #fff; border: 2px solid #37474f; text-shadow: 1px 1px 0 #000; }
+        /* 状态标签 */
+        .status-open {
+            background: #2196f3;
+            color: #fff;
+            border: 2px solid #1565c0;
+            text-shadow: 1px 1px 0 #000;
+        }
+        .status-in-progress {
+            background: #9c27b0;
+            color: #fff;
+            border: 2px solid #6a1b9a;
+            text-shadow: 1px 1px 0 #000;
+        }
+        .status-closed {
+            background: #607d8b;
+            color: #fff;
+            border: 2px solid #37474f;
+            text-shadow: 1px 1px 0 #000;
+        }
 
+        /* 按钮像素风格 */
         .btn-pixel {
             background: var(--accent);
             color: var(--bg);
@@ -183,6 +169,7 @@
             box-shadow: 1px 1px 0 rgba(0, 20, 0, 0.5);
         }
 
+        /* 输入框像素风格 */
         .input-pixel {
             background: var(--bg-elevated);
             color: var(--text);
@@ -195,6 +182,7 @@
             box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.3), 0 0 10px var(--accent-glow);
         }
 
+        /* 模态框 */
         .modal-pixel {
             background: var(--bg-elevated);
             border: 4px solid var(--border-strong);
@@ -205,6 +193,7 @@
             border-bottom: 3px solid var(--border-strong);
         }
 
+        /* 标签像素风格 */
         .tag-pixel {
             background: var(--bg-accent);
             color: var(--muted);
@@ -212,6 +201,7 @@
             font-size: 14px;
         }
 
+        /* 加载动画 - 像素风格 */
         .spinner-pixel {
             width: 40px;
             height: 40px;
@@ -219,101 +209,70 @@
             border-top-color: var(--accent);
             animation: spin 0.8s steps(8) infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
+        /* 季节装饰 */
+        .season-deco::before {
+            content: '🌸';
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 标题像素风格 */
+        .title-pixel {
+            font-family: var(--font-display) !important;
+            font-size: 16px !important;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        /* 描述区域 */
+        .description-box {
+            background: var(--bg-accent);
+            border: 3px solid var(--border);
+            box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.2);
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        /* 解决方案区域 */
         .resolution-box {
             background: rgba(124, 179, 66, 0.15);
             border: 3px solid var(--ok);
             box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.2);
         }
-        
-        /* 设置面板 */
-        .settings-panel {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            width: 280px;
-            z-index: 100;
-        }
     </style>
 </head>
-<body>
+<body class="season-deco">
     <!-- Header -->
     <header class="header-pixel sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl text-[var(--accent)]" style="font-family: 'Press Start 2P' !important; font-size: 14px;">
-                        <svg class="px-icon px-icon-lg" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="2"/><rect x="2" y="6" width="8" height="2"/><rect x="2" y="10" width="10" height="2"/><rect x="2" y="14" width="6" height="2"/></svg>
-                        Issue Dashboard
-                    </h1>
-                    <p class="text-[var(--muted)] mt-1">Async Issue Manager</p>
+                    <h1 class="title-pixel text-2xl text-[var(--accent)]">🌾 Issue Dashboard</h1>
+                    <p class="text-[var(--muted)] mt-1">Async Issue Manager - 星露谷风格</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="refreshData()" class="btn-pixel px-3 py-2 rounded flex items-center gap-2">
-                        <svg class="px-icon" id="refresh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 2v2h4v4h2V2H8zM2 10v4h6v-2H4v-4H2z"/><rect x="6" y="6" width="4" height="4"/></svg>
-                        <span>刷新</span>
-                    </button>
-                    <button onclick="toggleSettings()" class="btn-pixel px-3 py-2 rounded">
-                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="7" y="1" width="2" height="3"/><rect x="7" y="12" width="2" height="3"/><rect x="1" y="7" width="3" height="2"/><rect x="12" y="7" width="3" height="2"/><rect x="4" y="4" width="8" height="8"/><rect x="6" y="6" width="4" height="4" fill="var(--bg)"/></svg>
-                    </button>
-                </div>
+                <button onclick="refreshData()" class="btn-pixel px-4 py-2 rounded flex items-center gap-2">
+                    <span id="refresh-icon">🔄</span>
+                    <span>刷新</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Settings Panel -->
-    <div id="settings-panel" class="settings-panel hidden">
-        <div class="pixel-border rounded-lg p-4" style="background: var(--card);">
-            <h3 class="text-[var(--accent)] font-bold mb-4 flex items-center gap-2">
-                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="7" y="1" width="2" height="3"/><rect x="7" y="12" width="2" height="3"/><rect x="1" y="7" width="3" height="2"/><rect x="12" y="7" width="3" height="2"/><rect x="4" y="4" width="8" height="8"/><rect x="6" y="6" width="4" height="4" fill="var(--bg)"/></svg>
-                设置
-            </h3>
-            
-            <!-- 主题切换 -->
-            <div class="mb-4">
-                <label class="text-sm text-[var(--muted)] block mb-2">主题</label>
-                <div class="grid grid-cols-4 gap-2">
-                    <button onclick="setTheme('spring')" class="btn-pixel px-2 py-1 rounded text-xs" title="春">🌸</button>
-                    <button onclick="setTheme('summer')" class="btn-pixel px-2 py-1 rounded text-xs" title="夏">☀️</button>
-                    <button onclick="setTheme('autumn')" class="btn-pixel px-2 py-1 rounded text-xs" title="秋">🍂</button>
-                    <button onclick="setTheme('winter')" class="btn-pixel px-2 py-1 rounded text-xs" title="冬">❄️</button>
-                </div>
-            </div>
-            
-            <!-- 字体大小 -->
-            <div class="mb-4">
-                <label class="text-sm text-[var(--muted)] block mb-2">字体大小</label>
-                <select id="font-size-select" onchange="setFontSize(this.value)" class="input-pixel w-full rounded px-2 py-1">
-                    <option value="small">小</option>
-                    <option value="medium" selected>中</option>
-                    <option value="large">大</option>
-                </select>
-            </div>
-            
-            <!-- 显示密度 -->
-            <div class="mb-4">
-                <label class="text-sm text-[var(--muted)] block mb-2">显示密度</label>
-                <select id="density-select" onchange="setDensity(this.value)" class="input-pixel w-full rounded px-2 py-1">
-                    <option value="compact">紧凑</option>
-                    <option value="normal" selected>标准</option>
-                    <option value="comfortable">舒适</option>
-                </select>
-            </div>
-            
-            <!-- 自动刷新 -->
-            <div class="mb-2">
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="auto-refresh" checked onchange="toggleAutoRefresh()" class="w-4 h-4">
-                    <span class="text-sm text-[var(--muted)]">自动刷新 (30秒)</span>
-                </label>
-            </div>
-        </div>
-    </div>
-
     <!-- Stats Bar -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stats-container"></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stats-container">
+        </div>
     </div>
 
     <!-- Filters -->
@@ -321,10 +280,7 @@
         <div class="pixel-border rounded-lg p-4" style="background: var(--card);">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label class="block text-sm text-[var(--muted)] mb-2">
-                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="3"/><rect x="2" y="7" width="8" height="3"/><rect x="2" y="12" width="4" height="3"/></svg>
-                        状态
-                    </label>
+                    <label class="block text-sm text-[var(--muted)] mb-2">状态</label>
                     <select id="filter-status" onchange="applyFilters()" class="input-pixel w-full rounded px-3 py-2">
                         <option value="">全部</option>
                         <option value="open">Open</option>
@@ -333,32 +289,23 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-[var(--muted)] mb-2">
-                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="6" y="2" width="4" height="4"/><rect x="4" y="6" width="8" height="4"/><rect x="2" y="10" width="12" height="4"/></svg>
-                        优先级
-                    </label>
+                    <label class="block text-sm text-[var(--muted)] mb-2">优先级</label>
                     <select id="filter-priority" onchange="applyFilters()" class="input-pixel w-full rounded px-3 py-2">
                         <option value="">全部</option>
-                        <option value="P0">P0</option>
-                        <option value="P1">P1</option>
-                        <option value="P2">P2</option>
-                        <option value="P3">P3</option>
+                        <option value="P0">P0 🔥</option>
+                        <option value="P1">P1 ⚡</option>
+                        <option value="P2">P2 📌</option>
+                        <option value="P3">P3 🌱</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-[var(--muted)] mb-2">
-                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="5" r="3"/><rect x="3" y="10" width="10" height="5" rx="2"/></svg>
-                        负责人
-                    </label>
+                    <label class="block text-sm text-[var(--muted)] mb-2">负责人</label>
                     <select id="filter-assignee" onchange="applyFilters()" class="input-pixel w-full rounded px-3 py-2">
                         <option value="">全部</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-[var(--muted)] mb-2">
-                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="5" width="2" height="2"/><rect x="9" y="5" width="2" height="2"/><rect x="5" y="9" width="6" height="2"/></svg>
-                        搜索
-                    </label>
+                    <label class="block text-sm text-[var(--muted)] mb-2">搜索</label>
                     <input type="text" id="filter-search" onkeyup="applyFilters()" placeholder="搜索标题..." class="input-pixel w-full rounded px-3 py-2">
                 </div>
             </div>
@@ -367,12 +314,17 @@
 
     <!-- Issues Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-        <div id="issues-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <div id="issues-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        </div>
+        
+        <!-- Loading -->
         <div id="loading" class="flex justify-center items-center py-12">
             <div class="spinner-pixel rounded-full"></div>
         </div>
+        
+        <!-- Empty State -->
         <div id="empty-state" class="hidden text-center py-12">
-            <p class="text-[var(--muted)] text-lg">没有找到匹配的 Issue</p>
+            <p class="text-[var(--muted)] text-lg">🌾 没有找到匹配的 Issue</p>
         </div>
     </div>
 
@@ -383,74 +335,25 @@
                 <h2 id="modal-title" class="text-xl font-bold text-[var(--accent)]"></h2>
                 <button onclick="closeModal()" class="text-[var(--muted)] hover:text-[var(--accent)] text-3xl">&times;</button>
             </div>
-            <div id="modal-content" class="p-6"></div>
+            <div id="modal-content" class="p-6">
+            </div>
         </div>
     </div>
 
     <script>
-        const USE_STATIC_DATA = true;
+        const USE_STATIC_DATA = false;
         const API_BASE = USE_STATIC_DATA ? './data' : 'https://issues.loryonclaw.me/api';
         
         let allIssues = [];
         let allStats = {};
         let allAgents = [];
-        let autoRefreshInterval = null;
-
-        // 设置函数
-        function toggleSettings() {
-            document.getElementById('settings-panel').classList.toggle('hidden');
-        }
-        
-        function setTheme(season) {
-            document.documentElement.setAttribute('data-theme', 'stardew-' + season);
-            localStorage.setItem('theme', season);
-        }
-        
-        function setFontSize(size) {
-            document.documentElement.setAttribute('data-font-size', size);
-            localStorage.setItem('fontSize', size);
-        }
-        
-        function setDensity(density) {
-            document.documentElement.setAttribute('data-density', density);
-            localStorage.setItem('density', density);
-        }
-        
-        function toggleAutoRefresh() {
-            const enabled = document.getElementById('auto-refresh').checked;
-            localStorage.setItem('autoRefresh', enabled);
-            if (enabled) {
-                autoRefreshInterval = setInterval(refreshData, 30000);
-            } else {
-                clearInterval(autoRefreshInterval);
-            }
-        }
-        
-        function loadSettings() {
-            const theme = localStorage.getItem('theme') || 'spring';
-            const fontSize = localStorage.getItem('fontSize') || 'medium';
-            const density = localStorage.getItem('density') || 'normal';
-            const autoRefresh = localStorage.getItem('autoRefresh') !== 'false';
-            
-            setTheme(theme);
-            setFontSize(fontSize);
-            setDensity(density);
-            
-            document.getElementById('font-size-select').value = fontSize;
-            document.getElementById('density-select').value = density;
-            document.getElementById('auto-refresh').checked = autoRefresh;
-            
-            if (autoRefresh) {
-                autoRefreshInterval = setInterval(refreshData, 30000);
-            }
-        }
 
         async function init() {
-            loadSettings();
             await loadData();
             renderStats();
             renderFilters();
             applyFilters();
+            setInterval(refreshData, 30000);
         }
 
         async function loadData() {
@@ -460,9 +363,9 @@
                     fetch(`${API_BASE}/stats`),
                     fetch(`${API_BASE}/agents`)
                 ]);
-                allIssues = (await issuesRes.json()).issues || [];
+                allIssues = (await issuesRes.json()).issues;
                 allStats = await statsRes.json();
-                allAgents = (await agentsRes.json()).agents || [];
+                allAgents = (await agentsRes.json()).agents;
             } catch (error) {
                 console.error('加载数据失败:', error);
             }
@@ -481,18 +384,15 @@
         function renderStats() {
             const container = document.getElementById('stats-container');
             const stats = [
-                { label: '总计', value: allStats.total || 0, icon: '<rect x="2" y="2" width="12" height="2"/><rect x="2" y="6" width="8" height="2"/><rect x="2" y="10" width="10" height="2"/><rect x="2" y="14" width="6" height="2"/>' },
-                { label: 'Open', value: allStats.by_status?.open || 0, icon: '<circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2"/>' },
-                { label: '进行中', value: allStats.by_status?.['in-progress'] || 0, icon: '<rect x="2" y="7" width="4" height="2"/><rect x="7" y="4" width="2" height="8"/><rect x="10" y="7" width="4" height="2"/>' },
-                { label: '已完成', value: allStats.by_status?.closed || 0, icon: '<rect x="2" y="8" width="4" height="2" transform="rotate(-45 4 9)"/><rect x="5" y="6" width="8" height="2" transform="rotate(45 9 7)"/>' }
+                { label: '📊 总计', value: allStats.total, emoji: '🌾' },
+                { label: '🔵 Open', value: allStats.by_status?.open || 0, emoji: '🌱' },
+                { label: '🟣 进行中', value: allStats.by_status?.['in-progress'] || 0, emoji: '⚡' },
+                { label: '✅ 已完成', value: allStats.by_status?.closed || 0, emoji: '🎉' }
             ];
             container.innerHTML = stats.map(stat => `
                 <div class="stat-card rounded-lg p-4">
-                    <div class="text-sm text-[var(--muted)] flex items-center gap-1">
-                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor">${stat.icon}</svg>
-                        ${stat.label}
-                    </div>
-                    <div class="text-3xl font-bold text-[var(--accent)] mt-1">${stat.value}</div>
+                    <div class="text-sm text-[var(--muted)]">${stat.label}</div>
+                    <div class="text-3xl font-bold text-[var(--accent)] mt-1">${stat.emoji} ${stat.value}</div>
                 </div>
             `).join('');
         }
@@ -501,7 +401,7 @@
             const assigneeSelect = document.getElementById('filter-assignee');
             const assignees = [...new Set(allIssues.map(i => i.assignee).filter(Boolean))];
             assigneeSelect.innerHTML = '<option value="">全部</option>' + 
-                assignees.map(a => `<option value="${a}">${a}</option>`).join('');
+                assignees.map(a => `<option value="${a}">👤 ${a}</option>`).join('');
         }
 
         function applyFilters() {
@@ -542,7 +442,7 @@
                 const moreLabels = labels.length > 3 ? labels.length - 3 : 0;
                 
                 return `
-                    <div class="issue-card rounded-lg" onclick="showDetail(${issue.id})">
+                    <div class="issue-card rounded-lg p-4" onclick="showDetail(${issue.id})">
                         <div class="flex items-start justify-between mb-3">
                             <span class="priority-${issue.priority} text-xs px-2 py-1 rounded font-bold">
                                 ${issue.priority}
@@ -566,10 +466,7 @@
                         ` : ''}
                         
                         <div class="flex items-center justify-between text-sm text-[var(--muted)] mt-3 pt-3 border-t border-[var(--border)]">
-                            <span class="flex items-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="5" r="3"/><rect x="3" y="10" width="10" height="5" rx="2"/></svg>
-                                ${issue.assignee || '未分配'}
-                            </span>
+                            <span>${issue.assignee ? '👤 ' + issue.assignee : '未分配'}</span>
                             <span>${formatDate(issue.created_at)}</span>
                         </div>
                     </div>
@@ -590,6 +487,7 @@
             const labels = Array.isArray(issue.labels) ? issue.labels : 
                           (typeof issue.labels === 'string' ? issue.labels.split(',').map(l => l.trim()) : []);
             
+            // Markdown 渲染
             function renderMarkdown(text) {
                 if (!text) return '';
                 return text
@@ -607,6 +505,7 @@
                     .replace(/\n/g, '<br>');
             }
             
+            // 格式化时间戳
             function formatTimestamp(ts) {
                 if (!ts) return '';
                 const d = new Date(ts);
@@ -615,47 +514,34 @@
             
             const content = `
                 <div class="space-y-6">
+                    <!-- 基本信息卡片 -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div class="stat-card rounded p-3 text-center">
-                            <div class="text-xs text-[var(--muted)] mb-1 flex items-center justify-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="3"/><rect x="2" y="7" width="8" height="3"/><rect x="2" y="12" width="4" height="3"/></svg>
-                                状态
-                            </div>
+                            <div class="text-xs text-[var(--muted)] mb-1">📊 状态</div>
                             <span class="status-${issue.status} text-sm px-3 py-1 rounded inline-block">
                                 ${formatStatus(issue.status)}
                             </span>
                         </div>
                         <div class="stat-card rounded p-3 text-center">
-                            <div class="text-xs text-[var(--muted)] mb-1 flex items-center justify-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="6" y="2" width="4" height="4"/><rect x="4" y="6" width="8" height="4"/><rect x="2" y="10" width="12" height="4"/></svg>
-                                优先级
-                            </div>
+                            <div class="text-xs text-[var(--muted)] mb-1">🔥 优先级</div>
                             <span class="priority-${issue.priority} text-sm px-3 py-1 rounded inline-block font-bold">
                                 ${issue.priority}
                             </span>
                         </div>
                         <div class="stat-card rounded p-3 text-center">
-                            <div class="text-xs text-[var(--muted)] mb-1 flex items-center justify-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="5" r="3"/><rect x="3" y="10" width="10" height="5" rx="2"/></svg>
-                                负责人
-                            </div>
+                            <div class="text-xs text-[var(--muted)] mb-1">👤 负责人</div>
                             <div class="text-[var(--text)] font-bold">${issue.assignee || '未分配'}</div>
                         </div>
                         <div class="stat-card rounded p-3 text-center">
-                            <div class="text-xs text-[var(--muted)] mb-1 flex items-center justify-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="4" width="2" height="2"/><rect x="7" y="4" width="2" height="2"/><rect x="10" y="4" width="2" height="2"/></svg>
-                                创建时间
-                            </div>
+                            <div class="text-xs text-[var(--muted)] mb-1">📅 创建时间</div>
                             <div class="text-[var(--text)]">${formatDate(issue.created_at)}</div>
                         </div>
                     </div>
                     
+                    <!-- 标签 -->
                     ${labels.length > 0 ? `
                         <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
-                            <div class="text-sm text-[var(--muted)] mb-2 flex items-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="4" width="8" height="8" rx="1"/><rect x="10" y="4" width="4" height="4"/></svg>
-                                标签
-                            </div>
+                            <div class="text-sm text-[var(--muted)] mb-2">🏷️ 标签</div>
                             <div class="flex flex-wrap gap-2">
                                 ${labels.map(label => `
                                     <span class="tag-pixel px-3 py-1 rounded">${label}</span>
@@ -664,24 +550,20 @@
                         </div>
                     ` : ''}
                     
+                    <!-- 任务描述 -->
                     ${issue.body ? `
                         <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
-                            <div class="text-sm text-[var(--muted)] mb-3 flex items-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="5" width="8" height="1"/><rect x="4" y="8" width="6" height="1"/><rect x="4" y="11" width="4" height="1"/></svg>
-                                任务详情
-                            </div>
+                            <div class="text-sm text-[var(--muted)] mb-3">📝 任务详情</div>
                             <div class="text-[var(--text)] leading-relaxed">
                                 ${renderMarkdown(issue.body)}
                             </div>
                         </div>
                     ` : ''}
                     
+                    <!-- 进度时间线 -->
                     ${issue.progress_history && issue.progress_history.length > 0 ? `
                         <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
-                            <div class="text-sm text-[var(--muted)] mb-3 flex items-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="2" height="12"/><rect x="6" y="6" width="8" height="2"/><rect x="6" y="10" width="6" height="2"/></svg>
-                                进度时间线 (${issue.progress_history.length} 条记录)
-                            </div>
+                            <div class="text-sm text-[var(--muted)] mb-3">📈 进度时间线 (${issue.progress_history.length} 条记录)</div>
                             <div class="relative pl-6 space-y-4">
                                 <div class="absolute left-2 top-2 bottom-2 w-0.5 bg-[var(--accent)]" style="opacity: 0.5;"></div>
                                 ${issue.progress_history.map(p => `
@@ -701,16 +583,14 @@
                         </div>
                     ` : ''}
                     
+                    <!-- 交付物列表 -->
                     ${issue.deliverables && issue.deliverables.length > 0 ? `
                         <div class="pixel-border rounded p-4" style="background: var(--bg-accent);">
-                            <div class="text-sm text-[var(--muted)] mb-3 flex items-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="6" width="8" height="6"/></svg>
-                                交付物 (${issue.deliverables.length} 个文件)
-                            </div>
+                            <div class="text-sm text-[var(--muted)] mb-3">📦 交付物 (${issue.deliverables.length} 个文件)</div>
                             <div class="space-y-2">
                                 ${issue.deliverables.map(d => `
                                     <div class="stat-card rounded p-3 flex items-start gap-3">
-                                        <svg class="px-icon px-icon-lg text-[var(--accent)]" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="1" width="10" height="14" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="4" width="6" height="1"/><rect x="5" y="7" width="6" height="1"/><rect x="5" y="10" width="4" height="1"/></svg>
+                                        <div class="text-2xl">📄</div>
                                         <div class="flex-1">
                                             <div class="flex items-center justify-between">
                                                 <div class="font-bold text-[var(--accent)]">${d.filename || d.file || 'unknown'}</div>
@@ -725,12 +605,10 @@
                         </div>
                     ` : ''}
                     
+                    <!-- 解决方案 -->
                     ${issue.resolution ? `
                         <div class="resolution-box rounded p-4">
-                            <div class="text-sm text-[var(--ok)] mb-3 font-bold flex items-center gap-1">
-                                <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="8" width="4" height="2" transform="rotate(-45 4 9)"/><rect x="5" y="6" width="8" height="2" transform="rotate(45 9 7)"/></svg>
-                                解决方案
-                            </div>
+                            <div class="text-sm text-[var(--ok)] mb-3 font-bold">✅ 解决方案</div>
                             <div class="text-[var(--text)] leading-relaxed">
                                 ${renderMarkdown(issue.resolution)}
                             </div>
@@ -747,7 +625,11 @@
         }
 
         function formatStatus(status) {
-            const map = { 'open': 'Open', 'in-progress': '进行中', 'closed': '已完成' };
+            const map = {
+                'open': '🔵 Open',
+                'in-progress': '🟣 进行中',
+                'closed': '✅ 已完成'
+            };
             return map[status] || status;
         }
 
@@ -757,9 +639,11 @@
             const now = new Date();
             const diff = now - date;
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
             if (days === 0) return '今天';
             if (days === 1) return '昨天';
             if (days < 7) return `${days}天前`;
+            
             return date.toLocaleDateString('zh-CN');
         }
 

@@ -1,0 +1,17 @@
+{
+  "id": 12,
+  "title": "测试工作空间创建",
+  "status": "closed",
+  "priority": "P2",
+  "labels": "test",
+  "assignee": "unassigned",
+  "created_at": "2026-02-25T17:24:21.310031",
+  "updated_at": "2026-02-25T17:24:21.310031",
+  "assigned_at": null,
+  "closed_at": null,
+  "file": ".issues/closed/012-测试工作空间创建.md",
+  "body": "测试 Issue 工作空间自动创建功能\n\n\n## 解决方案\n\n测试完成，工作空间创建功能正常\n\n关闭时间: 2026-02-25T17:25:11.231639",
+  "progress_history": [],
+  "deliverables": [],
+  "resolution": "测试完成，工作空间创建功能正常\n\n关闭时间: 2026-02-25T17:25:11.231639"
+}

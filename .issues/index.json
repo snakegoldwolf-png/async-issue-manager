@@ -1,5 +1,5 @@
 {
-  "next_id": 14,
+  "next_id": 19,
   "issues": [
     {
       "id": 1,
@@ -101,12 +101,14 @@
         "knowledge-management",
         "integration"
       ],
-      "status": "in-progress",
+      "status": "closed",
       "assignee": "filer",
       "created_at": "2026-02-25T08:43:55.205469",
       "updated_at": "2026-02-25T08:44:09.355097",
-      "file": ".issues/in-progress/006-引入团队公共知识库obsidian-集成.md",
-      "assigned_at": "2026-02-25T08:44:09.354699"
+      "file": ".issues/closed/006-引入团队公共知识库obsidian-集成.md",
+      "assigned_at": "2026-02-25T08:44:09.354699",
+      "closed_at": "2026-02-26T18:18:13.569523",
+      "resolution": "Obsidian 集成完成：Vault 目录结构创建、同步脚本实现、内容填充、插件安装（Dataview/Templater/Calendar/Git/Excalidraw/Kanban）"
     },
     {
       "id": 7,
@@ -159,8 +161,8 @@
       "updated_at": "2026-02-25T09:20:55.276351",
       "file": ".issues/closed/009-部署-issue-看板到-cloudflare手机随时访问.md",
       "assigned_at": "2026-02-25T09:20:55.276005",
-      "closed_at": "2026-02-25T09:26:13.888753",
-      "resolution": "✅ Cloudflare Pages 部署方案已完成\n\n## 实现方案\n采用**静态部署 + 定期数据推送**方案，实现手机随时随地访问看板。\n\n## 核心组件\n\n### 1. 静态数据生成 (generate_static_data.py)\n- 解析 .issues/ 目录下所有 Markdown 文件\n- 生成 JSON 数据文件（issues.json, stats.json, agents.json）\n- 为每个 Issue 生成单独的详情文件\n- 输出到 web-dashboard/data/ 目录\n\n### 2. 前端静态模式 (index.html)\n- 支持双模式：API 模式（本地开发）+ 静态模式（生产部署）\n- USE_STATIC_DATA 开关控制\n- 静态模式直接读取 JSON 文件，无需后端服务\n- 完整功能：筛选、搜索、详情查看\n\n### 3. 自动部署系统\n**GitHub Actions** (.github/workflows/deploy.yml)\n- 每次推送自动部署\n- 每小时自动更新数据\n- 支持手动触发\n\n**本地更新脚本** (update_and_push.sh)\n- 生成最新数据\n- Git commit & push\n- 支持 cron/launchd 定时任务\n\n### 4. 完整文档\n- **QUICKSTART.md** - 5分钟快速部署指南\n- **DEPLOY.md** - 详细配置和故障排除\n- **README.md** - 功能特性和技术栈\n\n## 部署步骤\n\n1. 推送代码到 GitHub\n2. Cloudflare Pages 连接仓库\n3. 配置构建命令：`cd web-dashboard && python3 generate_static_data.py`\n4. 配置输出目录：`web-dashboard`\n5. 访问：https://your-project.pages.dev\n\n## 优势\n\n✅ **零成本** - Cloudflare Pages 免费版足够使用  \n✅ **零运维** - 无需管理服务器  \n✅ **全球加速** - Cloudflare CDN 覆盖全球  \n✅ **自动 HTTPS** - 免费 SSL 证书  \n✅ **自动更新** - GitHub Actions 定期同步  \n✅ **随时访问** - 手机/电脑随时查看  \n\n## 测试结果\n\n✅ 静态数据生成成功（5 issues, 4 agents）  \n✅ 前端静态模式加载正常  \n✅ 所有功能正常工作  \n✅ 响应式设计测试通过（桌面/平板/手机）  \n\n## 交付物\n\n所有文件已归档到 .issues/deliverables/issue-009/：\n- generate_static_data.py - 静态数据生成脚本\n- index.html - 看板前端（静态模式）\n- deploy.yml - GitHub Actions 配置\n- update_and_push.sh - 本地自动更新脚本\n- QUICKSTART.md - 快速部署指南\n- DEPLOY.md - 完整部署文档\n- README.md - 使用文档\n\n## 后续优化建议\n\nP1:\n- 自定义域名配置\n- 数据压缩优化\n- 缓存策略调整\n\nP2:\n- Webhook 触发（Issue 变更时立即更新）\n- 增量更新（只更新变更的数据）\n- 暗色模式\n\nP3:\n- 多环境部署（dev/staging/prod）\n- 访问统计（Cloudflare Analytics）\n- PWA 离线支持"
+      "closed_at": "2026-02-26T22:59:34.685267",
+      "resolution": "Cloudflare Pages 部署完成，实时 API 上线，手机可访问"
     },
     {
       "id": 10,
@@ -172,12 +174,14 @@
         "memory-system",
         "optimization"
       ],
-      "status": "in-progress",
+      "status": "closed",
       "assignee": "dev",
       "created_at": "2026-02-25T10:19:04.706294",
       "updated_at": "2026-02-25T10:19:33.810926",
-      "file": ".issues/in-progress/010-融合-hunter-研究成果在三层记忆结构基础上实现八步自我迭代流程.md",
-      "assigned_at": "2026-02-25T10:19:33.810592"
+      "file": ".issues/closed/010-融合-hunter-研究成果在三层记忆结构基础上实现八步自我迭代流程.md",
+      "assigned_at": "2026-02-25T10:19:33.810592",
+      "closed_at": "2026-02-26T22:59:34.715223",
+      "resolution": "八步自我迭代流程实现：iteration_engine.py + 强制规则 + quick_sync.py + auto_sync.py + 团队架构文档 v1.1.0"
     },
     {
       "id": 11,
@@ -222,6 +226,87 @@
       "workspace": "/Users/loryoncloud/Desktop/Issues/#013-测试工作空间路径",
       "closed_at": "2026-02-25T23:22:04.934422",
       "resolution": "测试完成，路径正确"
+    },
+    {
+      "id": 14,
+      "title": "为所有 Agent 升级 x-tweet-fetcher",
+      "priority": "P0",
+      "labels": [
+        "infrastructure,urgent"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-26T15:55:40.289976",
+      "updated_at": "2026-02-26T15:55:44.609593",
+      "file": ".issues/closed/014-为所有-agent-升级-x-tweet-fetcher.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#014-为所有-agent-升级-x-tweet-fetcher",
+      "assigned_at": "2026-02-26T15:55:44.609351",
+      "closed_at": "2026-02-26T16:05:30.094746",
+      "resolution": "11 个 Agent 已全部升级 x-tweet-fetcher（符号链接 → shared 目录）"
+    },
+    {
+      "id": 15,
+      "title": "研究 Polymarket 交易套现机会",
+      "priority": "P2",
+      "labels": [
+        "research,trading"
+      ],
+      "status": "closed",
+      "assignee": "hunter",
+      "created_at": "2026-02-26T15:55:40.331955",
+      "updated_at": "2026-02-26T15:55:44.633491",
+      "file": ".issues/closed/015-研究-polymarket-交易套现机会.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#015-研究-polymarket-交易套现机会",
+      "assigned_at": "2026-02-26T15:55:44.633269",
+      "closed_at": "2026-02-26T23:06:45.701804",
+      "resolution": "研究完成，结论：对我们团队暂无适配价值，暂不落地"
+    },
+    {
+      "id": 16,
+      "title": "研究 ohxiyu 架构并融入我们的系统",
+      "priority": "P2",
+      "labels": [
+        "research,architecture"
+      ],
+      "status": "in-progress",
+      "assignee": "dev",
+      "created_at": "2026-02-26T15:55:40.380249",
+      "updated_at": "2026-02-26T15:55:44.657199",
+      "file": ".issues/in-progress/016-研究-ohxiyu-架构并融入我们的系统.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#016-研究-ohxiyu-架构并融入我们的系统",
+      "assigned_at": "2026-02-26T15:55:44.656988"
+    },
+    {
+      "id": 17,
+      "title": "深度研究 OpenClaw 最新版更新内容",
+      "priority": "P1",
+      "labels": [
+        "research,openclaw"
+      ],
+      "status": "in-progress",
+      "assignee": "dev",
+      "created_at": "2026-02-26T15:55:40.415646",
+      "updated_at": "2026-02-26T15:55:44.688472",
+      "file": ".issues/in-progress/017-深度研究-openclaw-最新版更新内容.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#017-深度研究-openclaw-最新版更新内容",
+      "assigned_at": "2026-02-26T15:55:44.688190"
+    },
+    {
+      "id": 18,
+      "title": "优化看板网页详情页 + 装修风格",
+      "priority": "P1",
+      "labels": [
+        "web,frontend,collaboration"
+      ],
+      "status": "closed",
+      "assignee": "webby",
+      "created_at": "2026-02-26T15:55:40.453831",
+      "updated_at": "2026-02-26T15:55:44.721751",
+      "file": ".issues/closed/018-优化看板网页详情页--装修风格.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#018-优化看板网页详情页--装修风格",
+      "assigned_at": "2026-02-26T15:55:44.721461",
+      "closed_at": "2026-02-27T00:27:40.786072",
+      "resolution": "完成：星露谷像素风格主题 + 详情页优化（进度时间线、交付物列表）+ 设置面板（四季主题、字体大小、显示密度、自动刷新）+ 像素 SVG 图标替换 emoji"
     }
   ]
 }

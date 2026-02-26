@@ -1,0 +1,28 @@
+{
+  "id": 17,
+  "title": "深度研究 OpenClaw 最新版更新内容",
+  "status": "in-progress",
+  "priority": "P1",
+  "labels": "research,openclaw",
+  "assignee": "dev",
+  "created_at": "2026-02-26T15:55:40.415646",
+  "updated_at": "2026-02-26T15:55:40.415646",
+  "assigned_at": "2026-02-26T15:55:44.688190",
+  "closed_at": null,
+  "file": ".issues/in-progress/017-深度研究-openclaw-最新版更新内容.md",
+  "body": "深度研究 OpenClaw 最新版更新了什么，评估是否有升级的必要。",
+  "progress_history": [
+    {
+      "timestamp": "2026-02-27T00:31:19.245280",
+      "agent": "dev",
+      "progress": "开始深度研究 OpenClaw 最新版更新内容，已创建规范目录结构"
+    },
+    {
+      "timestamp": "2026-02-27T00:37:32.329977",
+      "agent": "dev",
+      "progress": "深度调研完成，已输出调研报告和升级方案，等待 bro 审核"
+    }
+  ],
+  "deliverables": [],
+  "resolution": null
+}

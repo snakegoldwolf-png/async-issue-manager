@@ -69,6 +69,9 @@ def parse_issue_file(file_path):
     current_section = None
     section_content = []
     
+    # 保存完整的 body 内容
+    full_body = body
+    
     for line in body.split('\n'):
         if line.startswith('## '):
             if current_section:
@@ -127,7 +130,7 @@ def parse_issue_file(file_path):
         'assigned_at': issue.get('assigned_at'),
         'closed_at': issue.get('closed_at'),
         'file': str(file_path.relative_to(ROOT_DIR)),
-        'body': sections.get('描述', ''),
+        'body': full_body,  # 使用完整的 body 内容
         'progress_history': progress_history,
         'deliverables': deliverables,
         'resolution': sections.get('解决方案')
@@ -210,6 +213,53 @@ def generate_agents_info(issues):
         'agents': sorted(agents.values(), key=lambda x: x['total'], reverse=True)
     }
 
+def load_progress_history():
+    """从 progress.jsonl 加载进度记录"""
+    progress_file = ISSUES_DIR / 'progress.jsonl'
+    progress_by_issue = defaultdict(list)
+    
+    if progress_file.exists():
+        with open(progress_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    record = json.loads(line)
+                    issue_id = record.get('issue_id')
+                    if issue_id:
+                        progress_by_issue[issue_id].append({
+                            'timestamp': record.get('timestamp', ''),
+                            'agent': record.get('agent', ''),
+                            'progress': record.get('progress', '')
+                        })
+                except json.JSONDecodeError:
+                    continue
+    
+    return progress_by_issue
+
+def load_deliverables():
+    """从 deliverables/index.json 加载交付物"""
+    deliverables_file = ISSUES_DIR / 'deliverables' / 'index.json'
+    deliverables_by_issue = defaultdict(list)
+    
+    if deliverables_file.exists():
+        with open(deliverables_file, 'r', encoding='utf-8') as f:
+            try:
+                data = json.load(f)
+                for item in data.get('deliverables', []):
+                    issue_id = item.get('issue_id')
+                    if issue_id:
+                        deliverables_by_issue[issue_id].append({
+                            'file': item.get('file', ''),
+                            'description': item.get('description', ''),
+                            'added_at': item.get('added_at', '')
+                        })
+            except json.JSONDecodeError:
+                pass
+    
+    return deliverables_by_issue
+
 def main():
     """主函数"""
     print("🔄 开始生成静态数据...")
@@ -221,6 +271,21 @@ def main():
     print("📋 收集 Issues...")
     issues = collect_all_issues()
     print(f"   找到 {len(issues)} 个 Issues")
+    
+    # 加载进度记录和交付物
+    print("📝 加载进度记录...")
+    progress_by_issue = load_progress_history()
+    
+    print("📦 加载交付物...")
+    deliverables_by_issue = load_deliverables()
+    
+    # 合并进度记录和交付物到 Issue
+    for issue in issues:
+        issue_id = issue['id']
+        if issue_id in progress_by_issue:
+            issue['progress_history'] = progress_by_issue[issue_id]
+        if issue_id in deliverables_by_issue:
+            issue['deliverables'] = deliverables_by_issue[issue_id]
     
     # 生成统计信息
     print("📊 生成统计信息...")

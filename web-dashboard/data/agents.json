@@ -1,33 +1,47 @@
 {
-  "total": 4,
+  "total": 6,
   "agents": [
+    {
+      "name": "dev",
+      "total": 5,
+      "open": 0,
+      "in_progress": 2,
+      "closed": 3
+    },
     {
       "name": "webby",
       "total": 2,
       "open": 0,
-      "in_progress": 1,
-      "closed": 1
+      "in_progress": 0,
+      "closed": 2
     },
     {
-      "name": "dev",
-      "total": 1,
+      "name": "unassigned",
+      "total": 2,
       "open": 0,
-      "in_progress": 1,
-      "closed": 0
+      "in_progress": 0,
+      "closed": 2
     },
     {
       "name": "filer",
       "total": 1,
       "open": 0,
-      "in_progress": 1,
-      "closed": 0
+      "in_progress": 0,
+      "closed": 1
+    },
+    {
+      "name": "debugger",
+      "total": 1,
+      "open": 0,
+      "in_progress": 0,
+      "closed": 1
     },
     {
       "name": "hunter",
       "total": 1,
       "open": 0,
-      "in_progress": 1,
-      "closed": 0
+      "in_progress": 0,
+      "closed": 1
     }
   ]
 }

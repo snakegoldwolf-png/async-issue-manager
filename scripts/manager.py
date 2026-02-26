@@ -145,28 +145,50 @@ updated_at: {timestamp}
         workspace_dir = Path("/Users/loryoncloud/Desktop/Issues") / workspace_name
         workspace_dir.mkdir(parents=True, exist_ok=True)
         
+        # 创建规范子目录结构
+        subdirs = [
+            "01-调研",
+            "01-调研/参考案例",
+            "02-方案",
+            "03-实施",
+            "03-实施/scripts",
+            "03-实施/configs",
+            "04-交付",
+            "05-日志"
+        ]
+        for subdir in subdirs:
+            (workspace_dir / subdir).mkdir(exist_ok=True)
+        
         # 创建工作空间 README
         readme_content = f"""# Issue #{issue_id:03d} 工作空间 - {title}
 
-**Issue**: #{issue_id:03d} - {slug}  
-**负责人**: {assignee or 'unassigned'}  
-**创建时间**: {timestamp}  
-**状态**: {issue['status']}
+## 基本信息
+
+- **Issue ID**: #{issue_id:03d}
+- **标题**: {title}
+- **优先级**: {priority}
+- **负责人**: {assignee or 'unassigned'}
+- **创建时间**: {timestamp}
+- **状态**: {issue['status']}
 
 ---
 
-## 📋 工作空间说明
+## 📋 需求描述
 
-这是 Issue #{issue_id:03d} 的独立工作空间，用于存放所有工作过程、草稿、临时文件。
+{body or '待补充'}
 
-**工作空间用途**：
-- 调研笔记
-- 设计草稿
-- 代码实验
-- 临时文件
-- 会议记录
+---
 
-**最终交付物位置**：`.issues/deliverables/issue-{issue_id:03d}/`
+## 📊 进度追踪
+
+| 阶段 | 状态 | 完成时间 |
+|------|------|----------|
+| 接到任务 | ✅ | {timestamp[:10]} |
+| 深度调研 | ⏳ | - |
+| 方案设计 | ⏳ | - |
+| 审核通过 | ⏳ | - |
+| 实操落地 | ⏳ | - |
+| 交付留存 | ⏳ | - |
 
 ---
 
@@ -174,25 +196,41 @@ updated_at: {timestamp}
 
 ```
 {workspace_name}/
-├── README.md          # 本文件
-├── research/          # 调研资料
-├── design/            # 设计文档
-├── drafts/            # 草稿
-└── notes/             # 工作笔记
+├── README.md              # 本文件
+├── 01-调研/               # 深度调研材料
+│   ├── 技术可行性.md
+│   ├── 团队适配分析.md
+│   ├── 风险评估.md
+│   └── 参考案例/
+├── 02-方案/               # 设计方案
+│   ├── 设计方案-v1.md
+│   └── 审核记录.md
+├── 03-实施/               # 实施记录
+│   ├── 实施日志.md
+│   ├── scripts/
+│   └── configs/
+├── 04-交付/               # 最终交付物
+│   ├── 交付清单.md
+│   └── 使用文档.md
+└── 05-日志/               # 工作日志
+    └── {timestamp[:10]}.md
 ```
 
 ---
 
-## 📊 工作进度
+## 📦 交付物清单
 
-### ✅ 已完成
-- [ ] 任务项 1
+- [ ] 待添加
 
-### 🔲 进行中
-- [ ] 任务项 2
+---
 
-### 📦 交付物
-- 待添加
+## 📝 工作流程
+
+1. **深度调研** → 输出调研报告到 `01-调研/`
+2. **方案设计** → 输出方案文档到 `02-方案/`
+3. **提交审核** → bro 审核通过后进入实施
+4. **实操落地** → 脚本和日志放到 `03-实施/`
+5. **交付留存** → 整理交付物到 `04-交付/`
 
 ---
 
@@ -200,10 +238,6 @@ updated_at: {timestamp}
 """
         readme_path = workspace_dir / "README.md"
         readme_path.write_text(readme_content, encoding='utf-8')
-        
-        # 创建子目录
-        for subdir in ["research", "design", "drafts", "notes"]:
-            (workspace_dir / subdir).mkdir(exist_ok=True)
         
         # 更新索引
         issue["file"] = str(filepath.relative_to(self.workspace))
@@ -336,6 +370,26 @@ updated_at: {timestamp}
                     return None
             except Exception as e:
                 print(f"⚠️ 无法检查交付物: {e}")
+        
+        # 检查桌面工作空间是否有内容
+        desktop_issues_dir = Path.home() / "Desktop" / "Issues"
+        workspace_found = False
+        workspace_has_content = False
+        
+        if desktop_issues_dir.exists():
+            for dir_name in desktop_issues_dir.iterdir():
+                if dir_name.is_dir() and dir_name.name.startswith(f"#{issue_id:03d}-"):
+                    workspace_found = True
+                    # 检查是否有实际内容（排除 README.md 和空目录）
+                    files = [f for f in dir_name.rglob("*") if f.is_file() and f.name != "README.md"]
+                    if files:
+                        workspace_has_content = True
+                    break
+        
+        if workspace_found and not workspace_has_content:
+            print(f"⚠️ Issue #{issue_id} 的桌面工作空间没有实际内容")
+            print(f"   请确保交付物已复制到 {desktop_issues_dir}/#{issue_id:03d}-*/")
+            print(f"   或使用 quick_sync.py 一键沉淀")
         
         old_path = self.workspace / issue["file"]
         new_path = self.closed_dir / old_path.name

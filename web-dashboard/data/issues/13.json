@@ -1,0 +1,17 @@
+{
+  "id": 13,
+  "title": "测试工作空间路径",
+  "status": "closed",
+  "priority": "P3",
+  "labels": [],
+  "assignee": "unassigned",
+  "created_at": "2026-02-25T23:21:34.321251",
+  "updated_at": "2026-02-25T23:21:34.321251",
+  "assigned_at": null,
+  "closed_at": null,
+  "file": ".issues/closed/013-测试工作空间路径.md",
+  "body": "测试新路径是否正确\n\n\n## 解决方案\n\n测试完成，路径正确\n\n关闭时间: 2026-02-25T23:22:04.934422",
+  "progress_history": [],
+  "deliverables": [],
+  "resolution": "测试完成，路径正确\n\n关闭时间: 2026-02-25T23:22:04.934422"
+}

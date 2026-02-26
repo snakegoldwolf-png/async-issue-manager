@@ -1,7 +1,7 @@
 {
   "id": 5,
   "title": "解决 auto compaction 导致的上下文混乱问题",
-  "status": "in-progress",
+  "status": "closed",
   "priority": "P0",
   "labels": "system, debugging, context-management",
   "assignee": "dev",
@@ -9,8 +9,8 @@
   "updated_at": "2026-02-25T08:43:44.401098",
   "assigned_at": "2026-02-25T08:43:55.174103",
   "closed_at": null,
-  "file": ".issues/in-progress/005-解决-auto-compaction-导致的上下文混乱问题.md",
-  "body": "",
+  "file": ".issues/closed/005-解决-auto-compaction-导致的上下文混乱问题.md",
+  "body": "## 问题描述\nauto compaction 机制导致上下文混乱，影响 Agent 的指令遵循度和记忆连贯性。\n\n## 任务目标\n1. 诊断 auto compaction 的触发条件和影响范围\n2. 分析上下文混乱的具体表现和根本原因\n3. 设计解决方案（可能包括：调整 compaction 策略、优化上下文管理、改进记忆机制）\n4. 实施并测试解决方案\n5. 编写文档说明修复方案\n\n## 验收标准\n- 明确诊断报告（问题原因、影响范围）\n- 可执行的解决方案\n- 测试验证通过\n- 完整的实施文档\n\n## 优先级\nP0 - 影响系统稳定性",
   "progress_history": [],
   "deliverables": [],
   "resolution": null

@@ -279,6 +279,22 @@
       "description": "Session Aborted 状态深度分析报告（8.8KB，12章节）：包含触发机制分析、恢复机制、预防措施、监控建议",
       "added_at": "2026-02-26T08:31:28.936582",
       "size": "12.2 KB"
+    },
+    {
+      "issue_id": 19,
+      "filename": "fix_memory_indexer.py",
+      "path": ".issues/deliverables/issue-019/fix_memory_indexer.py",
+      "description": "修复脚本：批量修复 12 个 workspace 的 memory_indexer.py 输出路径问题",
+      "added_at": "2026-02-27T03:33:07.897225",
+      "size": "3.4 KB"
+    },
+    {
+      "issue_id": 22,
+      "filename": "生物作业笔记整理.md",
+      "path": ".issues/deliverables/issue-022/生物作业笔记整理.md",
+      "description": "高三生物寒假作业笔记整理（4周全部），519行，20472字符，提取生物学知识点",
+      "added_at": "2026-02-27T05:41:05.343494",
+      "size": "20.0 KB"
     }
   ]
 }

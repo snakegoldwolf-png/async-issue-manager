@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Issue Dashboard - 星露谷风格</title>
+    <title>LoryonClaw Issues</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -250,6 +250,10 @@
                     <p class="text-[var(--muted)] mt-1">Async Issue Manager</p>
                 </div>
                 <div class="flex items-center gap-2">
+                    <a href="usage.html" class="btn-pixel px-3 py-2 rounded flex items-center gap-2" style="text-decoration: none;">
+                        <svg class="px-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="10" width="2" height="4"/><rect x="5" y="7" width="2" height="7"/><rect x="8" y="4" width="2" height="10"/><rect x="11" y="2" width="2" height="12"/></svg>
+                        <span>Usage</span>
+                    </a>
                     <button onclick="refreshData()" class="btn-pixel px-3 py-2 rounded flex items-center gap-2">
                         <svg class="px-icon" id="refresh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 2v2h4v4h2V2H8zM2 10v4h6v-2H4v-4H2z"/><rect x="6" y="6" width="4" height="4"/></svg>
                         <span>刷新</span>
@@ -388,8 +392,8 @@
     </div>
 
     <script>
-        const USE_STATIC_DATA = true;
-        const API_BASE = USE_STATIC_DATA ? './data' : 'https://issues.loryonclaw.me/api';
+        const USE_STATIC_DATA = false;
+        const API_BASE = USE_STATIC_DATA ? './data' : '/issues/api';
         
         let allIssues = [];
         let allStats = {};
@@ -592,7 +596,9 @@
             
             function renderMarkdown(text) {
                 if (!text) return '';
-                return text
+                // 先处理字面量 \\n 转换为真正的换行符
+                let processed = text.replace(/\\n/g, '\n');
+                return processed
                     .replace(/&/g, '&amp;')
                     .replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;')

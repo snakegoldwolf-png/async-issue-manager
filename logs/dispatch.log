@@ -16,3 +16,4 @@
 [2026-02-25 06:10:13] Issue #002 → hunter (永续 Agent 系统架构)
 [2026-02-25 06:10:13] Issue #003 → prad (第二代 AI 工作系统)
 [2026-02-25 06:10:13] Issue #004 → dev (已分配，无需重复派发)
+[2026-02-27 03:31:49] Issue #019 assigned to debugger - 修复 memory_indexer.py 输出路径问题

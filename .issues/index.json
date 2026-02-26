@@ -1,5 +1,5 @@
 {
-  "next_id": 19,
+  "next_id": 24,
   "issues": [
     {
       "id": 1,
@@ -283,13 +283,15 @@
       "labels": [
         "research,openclaw"
       ],
-      "status": "in-progress",
+      "status": "closed",
       "assignee": "dev",
       "created_at": "2026-02-26T15:55:40.415646",
       "updated_at": "2026-02-26T15:55:44.688472",
-      "file": ".issues/in-progress/017-深度研究-openclaw-最新版更新内容.md",
+      "file": ".issues/closed/017-深度研究-openclaw-最新版更新内容.md",
       "workspace": "/Users/loryoncloud/Desktop/Issues/#017-深度研究-openclaw-最新版更新内容",
-      "assigned_at": "2026-02-26T15:55:44.688190"
+      "assigned_at": "2026-02-26T15:55:44.688190",
+      "closed_at": "2026-02-27T05:48:36.832872",
+      "resolution": "完成：版本差异调研 2.12→2.25，筛选 10 个实用更新，配置已保留待升级生效"
     },
     {
       "id": 18,
@@ -307,6 +309,87 @@
       "assigned_at": "2026-02-26T15:55:44.721461",
       "closed_at": "2026-02-27T00:27:40.786072",
       "resolution": "完成：星露谷像素风格主题 + 详情页优化（进度时间线、交付物列表）+ 设置面板（四季主题、字体大小、显示密度、自动刷新）+ 像素 SVG 图标替换 emoji"
+    },
+    {
+      "id": 19,
+      "title": "修复 memory_indexer.py 输出路径问题",
+      "priority": "P2",
+      "labels": [
+        "bug,memory-system"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-27T03:17:26.643584",
+      "updated_at": "2026-02-27T03:33:09.880940",
+      "file": ".issues/closed/019-修复-memory_indexerpy-输出路径问题.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#019-修复-memory_indexerpy-输出路径问题",
+      "assigned_at": "2026-02-27T03:33:09.880666",
+      "closed_at": "2026-02-27T05:47:36.003981",
+      "resolution": "完成：修复 12 个 workspace 的 memory_indexer.py 输出路径问题"
+    },
+    {
+      "id": 20,
+      "title": "修复 Issue 详情页乱码 + 标签页标题",
+      "priority": "P1",
+      "labels": [
+        "bug,frontend,web"
+      ],
+      "status": "closed",
+      "assignee": "webby",
+      "created_at": "2026-02-27T03:20:59.076299",
+      "updated_at": "2026-02-27T03:20:59.105180",
+      "file": ".issues/closed/020-修复-issue-详情页乱码--标签页标题.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#020-修复-issue-详情页乱码--标签页标题",
+      "assigned_at": "2026-02-27T03:20:59.104917",
+      "closed_at": "2026-02-27T05:47:36.033235",
+      "resolution": "完成：修复详情页乱码 + 标签页标题改为 LoryonClaw Issues"
+    },
+    {
+      "id": 21,
+      "title": "研究人声替换/Resemble VST3 插件",
+      "priority": "P3",
+      "labels": [
+        "research,music,vst3,melody"
+      ],
+      "status": "in-progress",
+      "assignee": "melody",
+      "created_at": "2026-02-27T03:41:48.546263",
+      "updated_at": "2026-02-27T03:44:32.416731",
+      "file": ".issues/in-progress/021-研究人声替换resemble-vst3-插件.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#021-研究人声替换resemble-vst3-插件",
+      "assigned_at": "2026-02-27T03:44:32.416483"
+    },
+    {
+      "id": 22,
+      "title": "【紧急】整理高三生物寒假作业答疑关键词",
+      "priority": "P0",
+      "labels": [
+        "urgent,homework,xiaohong"
+      ],
+      "status": "closed",
+      "assignee": "xiaohong",
+      "created_at": "2026-02-27T03:48:25.962507",
+      "updated_at": "2026-02-27T03:48:30.760526",
+      "file": ".issues/closed/022-紧急整理高三生物寒假作业答疑关键词.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#022-紧急整理高三生物寒假作业答疑关键词",
+      "assigned_at": "2026-02-27T03:48:30.760196",
+      "closed_at": "2026-02-27T04:44:45.774288",
+      "resolution": "完成：4周生物作业笔记整理，519行，20472字符，提取真正的生物学知识点"
+    },
+    {
+      "id": 23,
+      "title": "开发 Token/请求数 Dashboard",
+      "priority": "P2",
+      "labels": [
+        "feature,frontend,dashboard"
+      ],
+      "status": "in-progress",
+      "assignee": "webby",
+      "created_at": "2026-02-27T05:14:15.771379",
+      "updated_at": "2026-02-27T05:14:22.796011",
+      "file": ".issues/in-progress/023-开发-token请求数-dashboard.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#023-开发-token请求数-dashboard",
+      "assigned_at": "2026-02-27T05:14:22.795666"
     }
   ]
 }

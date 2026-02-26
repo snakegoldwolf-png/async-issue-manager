@@ -2,11 +2,18 @@
 """
 Issue Manager API Server
 实时读取 .issues/ 目录数据，提供 REST API
+同时提供前端页面
+
+路由结构：
+- / : 主页占位
+- /issues : Issue 看板
+- /issues/api/* : API 端点
 """
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import json
 from pathlib import Path
 from datetime import datetime
@@ -28,6 +35,9 @@ INDEX_FILE = ISSUES_DIR / "index.json"
 PROGRESS_FILE = ISSUES_DIR / "progress.jsonl"
 DELIVERABLES_FILE = ISSUES_DIR / "deliverables/index.json"
 
+# 前端页面目录
+WEB_DIR = Path.home() / ".openclaw/shared/async-issue-manager/web-dashboard"
+
 
 def load_index():
     """加载 index.json"""
@@ -36,13 +46,105 @@ def load_index():
     return json.loads(INDEX_FILE.read_text(encoding="utf-8"))
 
 
-@app.get("/")
+# ========================================
+# 主页路由
+# ========================================
+
+@app.get("/", response_class=HTMLResponse)
 def root():
-    """健康检查"""
-    return {"status": "ok", "service": "Issue Manager API", "timestamp": datetime.now().isoformat()}
+    """主页占位"""
+    return HTMLResponse(content="""
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoryonClaw</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'VT323', 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a2e1a 0%, #0f1f0f 100%);
+            color: #e8f5e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff9ecd 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        p { color: #90b090; margin-bottom: 2rem; font-size: 1.2rem; }
+        a {
+            display: inline-block;
+            background: #3a5a3a;
+            color: #e8f5e8;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 3px solid #5a8a5a;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+        a:hover {
+            background: #4a6a4a;
+            border-color: #ff9ecd;
+            transform: translateY(-2px);
+        }
+        .emoji { font-size: 4rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="emoji">🦎</div>
+    <h1>LoryonClaw</h1>
+    <p>AI Agent Team Workspace</p>
+    <a href="/issues">📋 Issue Dashboard</a>
+</body>
+</html>
+    """)
 
 
-@app.get("/api/issues")
+@app.get("/health")
+def health():
+    """健康检查 API"""
+    return {"status": "ok", "service": "LoryonClaw", "timestamp": datetime.now().isoformat()}
+
+
+# ========================================
+# Issue 看板路由 (/issues)
+# ========================================
+
+@app.get("/issues", response_class=HTMLResponse)
+def issues_dashboard():
+    """Issue 看板页面"""
+    index_file = WEB_DIR / "index.html"
+    if index_file.exists():
+        # 读取并修改 API 路径
+        content = index_file.read_text(encoding="utf-8")
+        # 将 /api/ 替换为 /issues/api/
+        content = content.replace("'/api/", "'/issues/api/")
+        content = content.replace('"/api/', '"/issues/api/')
+        content = content.replace('`/api/', '`/issues/api/')
+        content = content.replace('fetch("/api', 'fetch("/issues/api')
+        content = content.replace("fetch('/api", "fetch('/issues/api")
+        content = content.replace("fetch(`/api", "fetch(`/issues/api")
+        return HTMLResponse(content=content)
+    return HTMLResponse(content="<h1>Dashboard not found</h1>", status_code=404)
+
+
+# ========================================
+# API 路由 (/issues/api/*)
+# ========================================
+
+@app.get("/issues/api/issues")
 def get_issues():
     """获取所有 Issue 列表"""
     data = load_index()
@@ -109,7 +211,7 @@ def load_deliverables(issue_id: int) -> list:
     return deliverables_list
 
 
-@app.get("/api/issues/{issue_id}")
+@app.get("/issues/api/issues/{issue_id}")
 def get_issue(issue_id: int):
     """获取单个 Issue 详情"""
     data = load_index()
@@ -144,7 +246,7 @@ def get_issue(issue_id: int):
     raise HTTPException(status_code=404, detail=f"Issue #{issue_id} not found")
 
 
-@app.get("/api/stats")
+@app.get("/issues/api/stats")
 def get_stats():
     """获取统计数据"""
     data = load_index()
@@ -173,7 +275,7 @@ def get_stats():
     return stats
 
 
-@app.get("/api/agents")
+@app.get("/issues/api/agents")
 def get_agents():
     """获取所有负责人列表"""
     data = load_index()
@@ -191,6 +293,150 @@ def get_agents():
             agents[assignee]["open"] += 1
     
     return {"agents": list(agents.values())}
+
+
+# ========================================
+# Token/Usage Dashboard API
+# ========================================
+
+def load_session_transcripts():
+    """从 agents 目录加载 session transcript 文件获取 usage 数据"""
+    agents_dir = Path.home() / ".openclaw/agents"
+    sessions = []
+    
+    if not agents_dir.exists():
+        return sessions
+    
+    # 遍历所有 agent 目录
+    for agent_dir in agents_dir.iterdir():
+        if not agent_dir.is_dir():
+            continue
+        
+        agent_name = agent_dir.name
+        sessions_dir = agent_dir / "sessions"
+        
+        if not sessions_dir.exists():
+            continue
+        
+        for jsonl_file in sessions_dir.glob("*.jsonl"):
+            try:
+                session_id = jsonl_file.stem
+                total_input = 0
+                total_output = 0
+                total_cost = 0
+                request_count = 0
+                last_model = ""
+                last_timestamp = None
+                
+                with open(jsonl_file, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        try:
+                            record = json.loads(line)
+                            # 检查 message 类型的记录
+                            if record.get('type') == 'message':
+                                msg = record.get('message', {})
+                                if msg.get('role') == 'assistant' and 'usage' in msg:
+                                    usage = msg['usage']
+                                    total_input += usage.get('input', 0)
+                                    total_output += usage.get('output', 0)
+                                    if 'cost' in usage and isinstance(usage['cost'], dict):
+                                        total_cost += usage['cost'].get('total', 0)
+                                    request_count += 1
+                                    last_model = msg.get('model', '')
+                                    if 'timestamp' in record:
+                                        last_timestamp = record['timestamp']
+                        except json.JSONDecodeError:
+                            continue
+                
+                if request_count > 0:
+                    sessions.append({
+                        "session_id": session_id,
+                        "agent": agent_name,
+                        "input_tokens": total_input,
+                        "output_tokens": total_output,
+                        "total_tokens": total_input + total_output,
+                        "cost": total_cost,
+                        "requests": request_count,
+                        "model": last_model,
+                        "last_activity": last_timestamp
+                    })
+            except Exception:
+                continue
+    
+    # 按总 token 数排序
+    sessions.sort(key=lambda x: x['total_tokens'], reverse=True)
+    return sessions
+
+
+@app.get("/issues/api/usage")
+def get_usage():
+    """获取 Token 使用统计"""
+    sessions = load_session_transcripts()
+    
+    # 汇总统计
+    total_input = sum(s['input_tokens'] for s in sessions)
+    total_output = sum(s['output_tokens'] for s in sessions)
+    total_requests = sum(s['requests'] for s in sessions)
+    total_cost = sum(s['cost'] for s in sessions)
+    
+    # 按 agent 分组
+    by_agent = {}
+    for s in sessions:
+        agent = s.get('agent', 'unknown')
+        if agent not in by_agent:
+            by_agent[agent] = {
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "total_tokens": 0,
+                "requests": 0,
+                "cost": 0,
+                "sessions": 0
+            }
+        by_agent[agent]["input_tokens"] += s['input_tokens']
+        by_agent[agent]["output_tokens"] += s['output_tokens']
+        by_agent[agent]["total_tokens"] += s['total_tokens']
+        by_agent[agent]["requests"] += s['requests']
+        by_agent[agent]["cost"] += s['cost']
+        by_agent[agent]["sessions"] += 1
+    
+    # 转换为列表并排序
+    agents_list = [{"name": k, **v} for k, v in by_agent.items()]
+    agents_list.sort(key=lambda x: x['total_tokens'], reverse=True)
+    
+    # 加载 Like·AI 统计数据
+    likeai_stats = load_likeai_stats()
+    
+    return {
+        "summary": {
+            "total_input_tokens": total_input,
+            "total_output_tokens": total_output,
+            "total_tokens": total_input + total_output,
+            "total_requests": total_requests,
+            "total_cost": total_cost,
+            "session_count": len(sessions),
+            "agent_count": len(by_agent)
+        },
+        "by_agent": agents_list,
+        "sessions": sessions[:50],  # 返回前 50 个 session
+        "likeai": likeai_stats  # Like·AI 统计数据
+    }
+
+
+# Like·AI 统计缓存文件
+LIKEAI_CACHE_FILE = Path.home() / ".openclaw/shared/async-issue-manager/.cache/likeai_stats.json"
+
+
+def load_likeai_stats():
+    """加载 Like·AI 统计数据（从缓存文件）"""
+    if LIKEAI_CACHE_FILE.exists():
+        try:
+            return json.loads(LIKEAI_CACHE_FILE.read_text(encoding='utf-8'))
+        except:
+            return None
+    return None
 
 
 if __name__ == "__main__":

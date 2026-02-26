@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="stardew-spring">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Usage Dashboard - LoryonClaw</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg: #1a2e1a;
+            --bg-accent: #243524;
+            --bg-elevated: #2e422e;
+            --card: #3a5a3a;
+            --text: #e8f5e8;
+            --text-strong: #f0fff0;
+            --muted: #90b090;
+            --border: #4a6a4a;
+            --border-strong: #5a8a5a;
+            --accent: #ff9ecd;
+            --accent-hover: #ffb8db;
+            --ok: #7cb342;
+            --warn: #ffb300;
+            --danger: #e53935;
+        }
+
+        * { font-family: 'VT323', 'Courier New', monospace !important; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .pixel-border {
+            border: 3px solid var(--border);
+            box-shadow: 
+                inset -2px -2px 0 var(--bg),
+                inset 2px 2px 0 var(--border-strong);
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 3px solid var(--border);
+        }
+
+        .progress-bar {
+            background: var(--bg-accent);
+            border: 2px solid var(--border);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--ok) 0%, var(--accent) 100%);
+            transition: width 0.5s ease;
+        }
+
+        .agent-row:hover {
+            background: var(--bg-elevated);
+        }
+
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            background: var(--bg-accent);
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+            background: var(--card);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <!-- Header -->
+    <header class="mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-3xl text-[var(--accent)] flex items-center gap-2">
+                    📊 Token Usage Dashboard
+                </h1>
+                <p class="text-[var(--muted)]">Agent Token 使用统计</p>
+            </div>
+            <nav class="flex gap-2">
+                <a href="index.html" class="nav-link">📋 Issues</a>
+                <a href="usage.html" class="nav-link active">📊 Usage</a>
+                <button onclick="loadData()" class="nav-link cursor-pointer">🔄 刷新</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="summary-cards">
+        <div class="stat-card rounded-lg p-4 text-center">
+            <div class="text-sm text-[var(--muted)] mb-1">总 Token 数</div>
+            <div class="text-2xl text-[var(--accent)]" id="total-tokens">-</div>
+        </div>
+        <div class="stat-card rounded-lg p-4 text-center">
+            <div class="text-sm text-[var(--muted)] mb-1">总请求数</div>
+            <div class="text-2xl text-[var(--ok)]" id="total-requests">-</div>
+        </div>
+        <div class="stat-card rounded-lg p-4 text-center">
+            <div class="text-sm text-[var(--muted)] mb-1">Agent 数</div>
+            <div class="text-2xl text-[var(--warn)]" id="agent-count">-</div>
+        </div>
+        <div class="stat-card rounded-lg p-4 text-center">
+            <div class="text-sm text-[var(--muted)] mb-1">Session 数</div>
+            <div class="text-2xl text-[var(--text)]" id="session-count">-</div>
+        </div>
+    </div>
+
+    <!-- Input/Output Split -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="stat-card rounded-lg p-4">
+            <div class="text-sm text-[var(--muted)] mb-2">📥 Input Tokens</div>
+            <div class="text-xl text-[var(--text)]" id="input-tokens">-</div>
+        </div>
+        <div class="stat-card rounded-lg p-4">
+            <div class="text-sm text-[var(--muted)] mb-2">📤 Output Tokens</div>
+            <div class="text-xl text-[var(--text)]" id="output-tokens">-</div>
+        </div>
+    </div>
+
+    <!-- Like·AI Stats Card -->
+    <div class="pixel-border rounded-lg p-4 mb-8" style="background: var(--bg-accent);">
+        <h2 class="text-xl text-[var(--accent)] mb-4">☁️ Like·AI API 统计</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="likeai-stats">
+            <div class="stat-card rounded-lg p-4 text-center">
+                <div class="text-sm text-[var(--muted)] mb-1">API 请求数</div>
+                <div class="text-2xl text-[var(--accent)]" id="likeai-requests">-</div>
+            </div>
+            <div class="stat-card rounded-lg p-4 text-center">
+                <div class="text-sm text-[var(--muted)] mb-1">API Token 数</div>
+                <div class="text-2xl text-[var(--ok)]" id="likeai-tokens">-</div>
+            </div>
+            <div class="stat-card rounded-lg p-4 text-center">
+                <div class="text-sm text-[var(--muted)] mb-1">剩余时间</div>
+                <div class="text-2xl text-[var(--warn)]" id="likeai-balance">-</div>
+            </div>
+            <div class="stat-card rounded-lg p-4 text-center">
+                <div class="text-sm text-[var(--muted)] mb-1">更新时间</div>
+                <div class="text-lg text-[var(--text)]" id="likeai-updated">-</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Usage Table -->
+    <div class="pixel-border rounded-lg p-4 mb-8" style="background: var(--bg-accent);">
+        <h2 class="text-xl text-[var(--accent)] mb-4">🤖 Agent 使用排行</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-[var(--muted)] text-left border-b border-[var(--border)]">
+                        <th class="py-2 px-2">#</th>
+                        <th class="py-2 px-2">Agent</th>
+                        <th class="py-2 px-2">Total Tokens</th>
+                        <th class="py-2 px-2 hidden md:table-cell">Input</th>
+                        <th class="py-2 px-2 hidden md:table-cell">Output</th>
+                        <th class="py-2 px-2">Requests</th>
+                        <th class="py-2 px-2 hidden md:table-cell">Sessions</th>
+                        <th class="py-2 px-2 w-32">占比</th>
+                    </tr>
+                </thead>
+                <tbody id="agent-table">
+                    <tr><td colspan="8" class="py-4 text-center text-[var(--muted)] loading">加载中...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Sessions -->
+    <div class="pixel-border rounded-lg p-4" style="background: var(--bg-accent);">
+        <h2 class="text-xl text-[var(--accent)] mb-4">🔥 Top Sessions (by Token Usage)</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-[var(--muted)] text-left border-b border-[var(--border)]">
+                        <th class="py-2 px-2">#</th>
+                        <th class="py-2 px-2">Agent</th>
+                        <th class="py-2 px-2">Session ID</th>
+                        <th class="py-2 px-2">Total Tokens</th>
+                        <th class="py-2 px-2 hidden md:table-cell">Requests</th>
+                        <th class="py-2 px-2 hidden md:table-cell">Model</th>
+                    </tr>
+                </thead>
+                <tbody id="session-table">
+                    <tr><td colspan="6" class="py-4 text-center text-[var(--muted)] loading">加载中...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/issues/api';
+
+        function formatNumber(num) {
+            if (num >= 1000000000) return (num / 1000000000).toFixed(2) + 'B';
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function formatNumberFull(num) {
+            return num.toLocaleString();
+        }
+
+        async function loadData() {
+            try {
+                const res = await fetch(`${API_BASE}/usage`);
+                const data = await res.json();
+                
+                // Update summary
+                const summary = data.summary || {};
+                document.getElementById('total-tokens').textContent = formatNumber(summary.total_tokens || 0);
+                document.getElementById('total-tokens').title = formatNumberFull(summary.total_tokens || 0);
+                document.getElementById('total-requests').textContent = formatNumber(summary.total_requests || 0);
+                document.getElementById('agent-count').textContent = summary.agent_count || 0;
+                document.getElementById('session-count').textContent = formatNumber(summary.session_count || 0);
+                document.getElementById('input-tokens').textContent = formatNumber(summary.total_input_tokens || 0);
+                document.getElementById('output-tokens').textContent = formatNumber(summary.total_output_tokens || 0);
+
+                // Render agent table
+                const agents = data.by_agent || [];
+                const maxTokens = agents.length > 0 ? agents[0].total_tokens : 1;
+                
+                const agentHtml = agents.map((agent, idx) => {
+                    const percent = ((agent.total_tokens / summary.total_tokens) * 100).toFixed(1);
+                    const barWidth = (agent.total_tokens / maxTokens) * 100;
+                    return `
+                        <tr class="agent-row border-b border-[var(--border)]">
+                            <td class="py-2 px-2 text-[var(--muted)]">${idx + 1}</td>
+                            <td class="py-2 px-2 font-bold text-[var(--accent)]">${agent.name}</td>
+                            <td class="py-2 px-2" title="${formatNumberFull(agent.total_tokens)}">${formatNumber(agent.total_tokens)}</td>
+                            <td class="py-2 px-2 hidden md:table-cell text-[var(--muted)]">${formatNumber(agent.input_tokens)}</td>
+                            <td class="py-2 px-2 hidden md:table-cell text-[var(--muted)]">${formatNumber(agent.output_tokens)}</td>
+                            <td class="py-2 px-2">${formatNumber(agent.requests)}</td>
+                            <td class="py-2 px-2 hidden md:table-cell text-[var(--muted)]">${agent.sessions}</td>
+                            <td class="py-2 px-2">
+                                <div class="progress-bar rounded h-4 relative">
+                                    <div class="progress-fill h-full rounded" style="width: ${barWidth}%"></div>
+                                    <span class="absolute inset-0 flex items-center justify-center text-xs">${percent}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                document.getElementById('agent-table').innerHTML = agentHtml || '<tr><td colspan="8" class="py-4 text-center text-[var(--muted)]">无数据</td></tr>';
+
+                // Render session table
+                const sessions = (data.sessions || []).slice(0, 20);
+                const sessionHtml = sessions.map((session, idx) => `
+                    <tr class="agent-row border-b border-[var(--border)]">
+                        <td class="py-2 px-2 text-[var(--muted)]">${idx + 1}</td>
+                        <td class="py-2 px-2 text-[var(--accent)]">${session.agent}</td>
+                        <td class="py-2 px-2 text-[var(--muted)] text-sm">${session.session_id.substring(0, 8)}...</td>
+                        <td class="py-2 px-2" title="${formatNumberFull(session.total_tokens)}">${formatNumber(session.total_tokens)}</td>
+                        <td class="py-2 px-2 hidden md:table-cell">${session.requests}</td>
+                        <td class="py-2 px-2 hidden md:table-cell text-[var(--muted)] text-sm">${session.model || '-'}</td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('session-table').innerHTML = sessionHtml || '<tr><td colspan="6" class="py-4 text-center text-[var(--muted)]">无数据</td></tr>';
+
+                // Render Like·AI stats
+                const likeai = data.likeai;
+                if (likeai && likeai.data) {
+                    const ld = likeai.data;
+                    document.getElementById('likeai-requests').textContent = formatNumber(ld.total_requests || 0);
+                    document.getElementById('likeai-tokens').textContent = ld.total_tokens || '-';
+                    document.getElementById('likeai-balance').textContent = ld.keys && ld.keys[0] ? ld.keys[0].balance : '-';
+                    
+                    // Format update time
+                    if (likeai.fetched_at) {
+                        const fetchedDate = new Date(likeai.fetched_at);
+                        document.getElementById('likeai-updated').textContent = fetchedDate.toLocaleString('zh-CN', { 
+                            month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' 
+                        });
+                    }
+                }
+
+            } catch (err) {
+                console.error('Failed to load usage data:', err);
+                document.getElementById('agent-table').innerHTML = '<tr><td colspan="8" class="py-4 text-center text-[var(--danger)]">加载失败</td></tr>';
+            }
+        }
+
+        // Load on page load
+        loadData();
+        
+        // Auto refresh every 60 seconds
+        setInterval(loadData, 60000);
+    </script>
+</body>
+</html>

@@ -268,13 +268,15 @@
       "labels": [
         "research,architecture"
       ],
-      "status": "in-progress",
+      "status": "closed",
       "assignee": "dev",
       "created_at": "2026-02-26T15:55:40.380249",
       "updated_at": "2026-02-26T15:55:44.657199",
-      "file": ".issues/in-progress/016-研究-ohxiyu-架构并融入我们的系统.md",
+      "file": ".issues/closed/016-研究-ohxiyu-架构并融入我们的系统.md",
       "workspace": "/Users/loryoncloud/Desktop/Issues/#016-研究-ohxiyu-架构并融入我们的系统",
-      "assigned_at": "2026-02-26T15:55:44.656988"
+      "assigned_at": "2026-02-26T15:55:44.656988",
+      "closed_at": "2026-02-27T08:03:55.129284",
+      "resolution": "完成：全自动记忆置信度系统，4 个核心组件（Indexer/Tracker/Decayer/Cleaner），扫描 13 个 Agent 共 114 条记忆"
     },
     {
       "id": 17,

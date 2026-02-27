@@ -1,5 +1,5 @@
 {
-  "next_id": 24,
+  "next_id": 29,
   "issues": [
     {
       "id": 1,
@@ -385,13 +385,96 @@
       "labels": [
         "feature,frontend,dashboard"
       ],
-      "status": "in-progress",
+      "status": "closed",
       "assignee": "webby",
       "created_at": "2026-02-27T05:14:15.771379",
       "updated_at": "2026-02-27T05:14:22.796011",
-      "file": ".issues/in-progress/023-开发-token请求数-dashboard.md",
+      "file": ".issues/closed/023-开发-token请求数-dashboard.md",
       "workspace": "/Users/loryoncloud/Desktop/Issues/#023-开发-token请求数-dashboard",
-      "assigned_at": "2026-02-27T05:14:22.795666"
+      "assigned_at": "2026-02-27T05:14:22.795666",
+      "closed_at": "2026-02-27T12:52:51.597712",
+      "resolution": "完成：Token Dashboard 已上线 https://loryonclaw.me/dashboard/，星露谷风格，实时数据"
+    },
+    {
+      "id": 24,
+      "title": "融会贯通：让架构长出血肉",
+      "priority": "P1",
+      "labels": [
+        "architecture,automation,knowledge-system"
+      ],
+      "status": "in-progress",
+      "assignee": "dev",
+      "created_at": "2026-02-27T09:24:06.620649",
+      "updated_at": "2026-02-27T09:24:13.117563",
+      "file": ".issues/in-progress/024-融会贯通让架构长出血肉.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#024-融会贯通让架构长出血肉",
+      "assigned_at": "2026-02-27T09:24:13.117168"
+    },
+    {
+      "id": 25,
+      "title": "Agent 自动 Compact 机制",
+      "priority": "P2",
+      "labels": [
+        "automation,memo,infrastructure"
+      ],
+      "status": "closed",
+      "assignee": "memo",
+      "created_at": "2026-02-27T09:24:06.675786",
+      "updated_at": "2026-02-27T09:24:13.152303",
+      "file": ".issues/closed/025-agent-自动-compact-机制.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#025-agent-自动-compact-机制",
+      "assigned_at": "2026-02-27T09:24:13.151999",
+      "closed_at": "2026-02-27T21:58:53.007603",
+      "resolution": "完成：配置了自动 compaction（maxHistoryShare: 0.8, memoryFlush: enabled），到 80% 自动触发，compact 前保存重要信息到 MEMORY.md"
+    },
+    {
+      "id": 26,
+      "title": "网络慢/下载卡顿问题排查",
+      "priority": "P3",
+      "labels": [
+        "infrastructure,network,debug"
+      ],
+      "status": "closed",
+      "assignee": "debugger",
+      "created_at": "2026-02-27T09:24:06.715377",
+      "updated_at": "2026-02-27T09:31:05.421525",
+      "file": ".issues/closed/026-网络慢下载卡顿问题排查.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#026-网络慢下载卡顿问题排查",
+      "assigned_at": "2026-02-27T09:31:05.421052",
+      "closed_at": "2026-02-27T09:37:07.934563",
+      "resolution": "排查完成。根本原因：直连国际网络受限（ping 延迟 330ms+，下载超时）。解决方案：使用代理（Vortex 127.0.0.1:7897）。当前状态：代理正常工作，通过代理访问速度正常（Google 0.2s，下载 400KB/s+）。建议：确保代理始终运行，命令行工具配置代理环境变量。"
+    },
+    {
+      "id": 27,
+      "title": "接入 Nano Banana 2.0 图像生成",
+      "priority": "P2",
+      "labels": [
+        "feature,integration,image-gen"
+      ],
+      "status": "closed",
+      "assignee": "dev",
+      "created_at": "2026-02-27T09:53:29.939356",
+      "updated_at": "2026-02-27T09:56:16.579658",
+      "file": ".issues/closed/027-接入-nano-banana-20-图像生成.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#027-接入-nano-banana-20-图像生成",
+      "assigned_at": "2026-02-27T09:56:16.579225",
+      "closed_at": "2026-02-27T22:30:51.232526",
+      "resolution": ""
+    },
+    {
+      "id": 28,
+      "title": "记忆树系统：统一语义框架",
+      "priority": "P2",
+      "labels": [
+        "architecture,memory-system,knowledge-system"
+      ],
+      "status": "in-progress",
+      "assignee": "dev",
+      "created_at": "2026-02-27T23:01:20.199906",
+      "updated_at": "2026-02-27T23:01:24.865787",
+      "file": ".issues/in-progress/028-记忆树系统统一语义框架.md",
+      "workspace": "/Users/loryoncloud/Desktop/Issues/#028-记忆树系统统一语义框架",
+      "assigned_at": "2026-02-27T23:01:24.865439"
     }
   ]
 }

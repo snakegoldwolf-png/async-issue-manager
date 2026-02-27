@@ -295,6 +295,22 @@
       "description": "高三生物寒假作业笔记整理（4周全部），519行，20472字符，提取生物学知识点",
       "added_at": "2026-02-27T05:41:05.343494",
       "size": "20.0 KB"
+    },
+    {
+      "issue_id": 26,
+      "filename": "issue-26-network-analysis.md",
+      "path": ".issues/deliverables/issue-026/issue-26-network-analysis.md",
+      "description": "网络慢问题排查报告：包含排查过程、对比分析、根本原因和解决方案",
+      "added_at": "2026-02-27T09:37:00.954237",
+      "size": "4.4 KB"
+    },
+    {
+      "issue_id": 27,
+      "filename": "README.md",
+      "path": ".issues/deliverables/issue-027/README.md",
+      "description": "",
+      "added_at": "2026-02-27T22:30:43.495656",
+      "size": "3.5 KB"
     }
   ]
 }

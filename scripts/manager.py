@@ -350,8 +350,8 @@ updated_at: {timestamp}
         print(f"✅ Issue #{issue_id} 已取消分配，状态改回 open")
         return issue
     
-    def close(self, issue_id, resolution="", check_deliverable=True):
-        """关闭 Issue（需要检查交付物）"""
+    def close(self, issue_id, resolution="", check_deliverable=True, check_sediment=True):
+        """关闭 Issue（需要检查交付物和沉淀）"""
         issue = self._find(issue_id)
         if not issue:
             print(f"❌ Issue #{issue_id} 不存在")
@@ -370,6 +370,22 @@ updated_at: {timestamp}
                     return None
             except Exception as e:
                 print(f"⚠️ 无法检查交付物: {e}")
+        
+        # 检查是否有知识沉淀
+        if check_sediment:
+            try:
+                from sediment_check import check_sediment as do_check_sediment
+                agent = issue.get("assignee")
+                if agent and agent != "unassigned":
+                    result = do_check_sediment(issue_id, agent)
+                    if not result.get("has_sediment"):
+                        print(f"⚠️ Issue #{issue_id} 没有知识沉淀")
+                        print(f"   建议先更新 MEMORY.md 或 memory/ 目录")
+                        print(f"   使用 sediment.py 沉淀知识：")
+                        print(f"   cd ~/.openclaw/shared/sediment && python3 sediment.py --agent {agent} --content \"学到的内容\" --type knowledge")
+                        # 只是警告，不阻止关闭
+            except Exception as e:
+                print(f"⚠️ 无法检查沉淀: {e}")
         
         # 检查桌面工作空间是否有内容
         desktop_issues_dir = Path.home() / "Desktop" / "Issues"

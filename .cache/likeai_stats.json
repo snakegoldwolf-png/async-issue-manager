@@ -1,20 +1,20 @@
 {
-  "fetched_at": "2026-02-27T05:35:00+08:00",
+  "fetched_at": "2026-02-27T23:42:00+08:00",
   "source": "like-ai.cc",
   "data": {
     "key_count": 1,
     "valid_keys": 1,
-    "total_requests": 7382,
-    "total_tokens": "297.4M",
-    "total_tokens_raw": 297400000,
+    "total_requests": 11469,
+    "total_tokens": "448.6M",
+    "total_tokens_raw": 448600000,
     "keys": [
       {
         "name": "30022508",
         "group": "30天无限",
         "status": "启用",
-        "balance": "28 天",
-        "requests": 7382,
-        "tokens": "297.4M"
+        "balance": "27 天",
+        "requests": 11469,
+        "tokens": "448.6M"
       }
     ]
   }
